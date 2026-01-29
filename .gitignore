@@ -1,0 +1,13 @@
+tmp/
+__pycache__/
+*.pyc
+*$py.class
+*.egg-info/
+env/
+.venv/
+venv/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.vscode/
