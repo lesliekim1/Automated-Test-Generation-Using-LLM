@@ -1,7 +1,5 @@
 # Automated-Test-Generation-Using-LLM
 
-## Description
-
 This repository contains scripts for a replication study of Meta’s LLM-based automated unit test generation method [1], evaluated on the Tests4Py benchmark [2] using Python and pytest.
 
 The goal of this project is to evaluate whether applying the same filtering pipeline described in Meta’s study results in similar coverage improvements on the Tests4Py dataset.
@@ -31,4 +29,4 @@ page 557–561, New York, NY, USA, 2024. Association for Computing
 Machinery.
 
 ## License 
-This project is licensed under the MIT License - see the LICENSE[LICENSE] file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
