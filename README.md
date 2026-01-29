@@ -2,7 +2,7 @@
 
 This repository contains scripts for a replication study of Meta’s LLM-based automated unit test generation method [1], evaluated on the Tests4Py benchmark [2] using Python and pytest.
 
-The goal of this project is to evaluate whether applying the same filtering pipeline described in Meta’s study results in similar coverage improvements on the Tests4Py dataset.
+The goal of this project is to evaluate whether applying the same filtering steps described in Meta’s study results in similar coverage improvements on the Tests4Py dataset.
 
 ## Installation
 
