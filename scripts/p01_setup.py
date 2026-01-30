@@ -28,7 +28,7 @@ PROJECTS = {
     "youtubedl": 43,
 }
 
-# Checks out Tests4Py programs into tmp folder using the t4p CLI.
+# Retrieve and add Tests4Py project(s) into tmp folder using t4p. 
 def main():
     parser = argparse.ArgumentParser(description = "checkout all Tests4Py projects.")
 
