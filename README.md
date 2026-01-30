@@ -21,11 +21,9 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 
 ## Scripts
 
-- `scripts/p01_setup.py`  
-Checks out all Tests4Py projects (or a single project using `--project` or `-p`) into `tmp/`.
+- [`p01_setup.py`](scripts/p01_setup.py): Checks out all Tests4Py projects (or a single project using `--project` or `-p`) into `tmp/`.
 
-- `scripts/p02_baseline_coverage.py`
-Runs the original test suites of each Tests4Py project to record statement coverages.
+- [`p02_baseline_coverage.py`](): Runs the original test suites of each Tests4Py project to record statement coverages.
   
 ## References
 
