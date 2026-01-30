@@ -28,41 +28,42 @@ PROJECTS = {
     "youtubedl": 43,
 }
 
+# Checks out Tests4Py programs into tmp folder using the t4p CLI.
 def main():
-    parser = argparse.ArgumentParser(description = "checkout all Tests4Py programs.")
+    parser = argparse.ArgumentParser(description = "checkout all Tests4Py projects.")
 
     parser.add_argument(
         "-p", "--project",
-        help="checkout only one project."
+        help="checkout a single project."
     )
 
+    # scripts is the root dir
     args = parser.parse_args()
     root_dir = Path(__file__).absolute().parent
-    t4p = root_dir /".venv" / "Scripts" / "t4p.exe"
+    t4p = root_dir.parent /".venv" / "Scripts" / "t4p.exe"
 
-    # Ensure that tmp folder exists
+    # Create tmp dir to store Tests4Py projects
     tmp_dir = root_dir / "tmp"
     tmp_dir.mkdir(exist_ok=True)
 
-    # Use a single project
-    if args.project and args.project not in PROJECTS:
-        sys.exit(f"Unknown project: '{args.project}'.\nTests4Py projects: {"\n".join((PROJECTS.keys()))}")
+    # Checkout a single project
+    if args.project:
+        if args.project not in PROJECTS:
+            sys.exit(f"Unknown project: '{args.project}'.\nTests4Py projects: {"\n".join((PROJECTS.keys()))}")
         t4p_projects = {args.project: PROJECTS[args.project]} 
-    
-    # Use all projects
+        
+    # Checkout all projects
     else:
         t4p_projects = PROJECTS
     
     for project, num_bugs in t4p_projects.items():
-        for bug_id in range(num_bugs):
-            print(f"checkout {project} #{bug_id}... ")
-            
-            result = subprocess.run(
-                [t4p, "checkout", "-p", project, "-i", str(bug_id), "-w", str(tmp_dir)],
-                cwd=str(root)
-            )
+        for bug_id in range(1, num_bugs+1):
+            print(f"CHECKOUT {project}_{bug_id}... ")
 
-    print("\ndone")
+            subprocess.run(
+                [str(t4p), "checkout", "-p", project, "-i", str(bug_id), "-w", str(tmp_dir)],
+                cwd=str(root_dir)
+            )
 
 if __name__ == "__main__":
     main()

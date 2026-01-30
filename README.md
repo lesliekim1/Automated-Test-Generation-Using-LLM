@@ -19,6 +19,14 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 .\.venv\Scripts\Activate.ps1
 ```
 
+## Scripts
+
+- `scripts/p01_setup.py`  
+Checks out all Tests4Py projects (or a single project using `--project` or `-p`) into `tmp/`.
+
+- `scripts/p02_baseline_coverage.py`
+Runs the original test suites of each Tests4Py project to record statement coverages.
+  
 ## References
 
 [1] N. Alshahwan, J. Chheda, A. Finogenova, B. Gokkaya, M. Harman,
