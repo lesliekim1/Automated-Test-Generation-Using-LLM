@@ -57,7 +57,15 @@ def main():
         t4p_projects = PROJECTS
     
     for project, num_bugs in t4p_projects.items():
-        for bug_id in range(1, num_bugs+1):
+        # Use at most 3 buggy versions per project to keep tmp size manageable
+        if num_bugs == 1:
+            trials = 1
+        elif num_bugs == 2:
+            trials = 2
+        else:
+            trials = 3
+
+        for bug_id in range(1, trials+1):
             print(f"CHECKOUT {project}_{bug_id}... ")
 
             subprocess.run(
