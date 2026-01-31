@@ -48,7 +48,7 @@ def main():
     # Checkout a single project
     if args.project:
         if args.project not in PROJECTS:
-            sys.exit(f"Unknown project: '{args.project}'.\nTests4Py projects: {"\n".join((PROJECTS.keys()))}")
+            sys.exit(f"Unknown project: {args.project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         t4p_projects = {args.project: PROJECTS[args.project]} 
         
     # Checkout all projects

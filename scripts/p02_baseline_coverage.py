@@ -70,7 +70,7 @@ def main():
     # Use one project and its buggy versions
     if args.project:
         if args.project not in PROJECTS:
-            sys.exit(f"Unknown project: '{args.project}'.\nTests4Py projects: {"\n".join((PROJECTS.keys()))}")
+            sys.exit(f"Unknown project: {args.project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         t4p_projects = {args.project: PROJECTS[args.project]} 
         
     # Use all projects
@@ -85,14 +85,25 @@ def main():
             print(f"BASELINE COVERAGE {project}_{bug_id}... ")
             
             if bug_id == 1:
-                # Check if there's no compatibility issues first to decide to include project for experiment
+                # run 'pip install -e .' only on each project_1 
                 result = subprocess.run(
                     [str(pip), "install", "-e", "."],
                     cwd=str(project_dir)
                     )
 
             if result.returncode == 0:
-                print("init")
+                new_row = {
+                    "program_name": program_name,
+                    "included": True,
+                    "llm_test_file": "",
+                    "builds": "",
+                    "passes": "",
+                    "coverage_before": "",
+                    "coverage_after": "",
+                    "coverage_delta": "",
+                    "kept": "",
+                    "discard_reason": ""
+                }
             else:
                 new_row = {
                     "program_name": program_name,
