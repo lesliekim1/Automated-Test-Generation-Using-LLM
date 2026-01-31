@@ -44,17 +44,18 @@ TEST_FILES = {
     "scrapy": "tests/test_mail.py",
     "thefuck": "tests/test_logs.py",
     "tornado": "tornado/test/options_test.py",
-    "tqdm": "tqdm/tests/tests_version.py"
+    "tqdm": "tqdm/tests/tests_version.py",
     "youtubedl": "test/test_aes.py"
 }
 
+# Record the statement of a test class from each Tests4Py programs that is compatible to environment. 
 def main():
     parser = argparse.ArgumentParser(description = "get statement coverage of a test class from " \
     "each Tests4Py project.")
 
     parser.add_argument(
         "-p", "--project",
-        help="get coverage for a single project."
+        help="get statment coverage for a single project."
     )
 
     args = parser.parse_args()
@@ -104,25 +105,26 @@ def main():
             print(f"BASELINE COVERAGE {project}_{bug_id}... ")
             
             if bug_id == 1:
-                # Run 'pip install -e .' only on each project_1 to make sure that it's compatible to environment
+                # Run 'pip install -e .' on each project_1 to make sure that it's compatible
                 result = subprocess.run(
                     [str(pip), "install", "-e", "."],
                     cwd=str(project_dir)
                     )
 
             if result.returncode == 0:
+                test_file = project_dir / TEST_FILES[project]
                 
-                # Select one test class only for each compatible project
-                test_file = project_dir / "tests" / "test_black.py"
-
+                # Run pytest [test file] --cov to get statement coverage and record it 
                 result2 = subprocess.run(
-                    [str(pytest), str(test_file), "--cov=black", "--cov-report=term"],
+                    [str(pytest), str(test_file), "--cov", "--cov-report=term"],
                     cwd=str(project_dir),
                     stdout=subprocess.PIPE,
                     text=True
                 )
 
-                if result2 != 0:
+                print(result.stdout)
+
+                if result2.returncode != 0:
                     new_row = {
                         "program_name": program_name,
                         "included": False,
@@ -135,27 +137,32 @@ def main():
                         "kept": "",
                         "discard_reason": ""
                     }
-                
-                elif project == "calculator":
-                    test_file = tmp_dir / "f{project}_{bug_id}" / "tests" / "test_calc.py"
-                    result2 = subprocess.run(
-                        [str(pytest), f"--cov={test_file}"]
-                    )
+                else:
 
+                    coverage_before = ""
+                    # Split coverage report into list of lines
+                    for line in result2.stdout.splitlines():
+                        line = line.strip()
 
-                new_row = {
-                    "program_name": program_name,
-                    "included": True,
-                    "llm_test_file": "",
-                    "builds": "",
-                    "passes": "",
-                    "coverage_before": "",
-                    "coverage_after": "",
-                    "coverage_delta": "",
-                    "kept": "",
-                    "discard_reason": ""
-                }
+                        # Last substring is coverage number
+                        if line.startswith("TOTAL"):
+                            coverage_before = line.split()[-1].replace("%", "")
+                            break
+                                                  
+                    new_row = {
+                        "program_name": program_name,
+                        "included": True,
+                        "llm_test_file": "",
+                        "builds": "",
+                        "passes": "",
+                        "coverage_before": int(coverage_before),
+                        "coverage_after": "",
+                        "coverage_delta": "",
+                        "kept": "",
+                        "discard_reason": ""
+                    }
 
+            # fails to do pip install -e .
             else:
                 new_row = {
                     "program_name": program_name,
