@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 import subprocess
 import pandas as pd
-import os
 
 PROJECTS = {
     "ansible": 18,
@@ -30,22 +29,27 @@ PROJECTS = {
 }
 
 TEST_FILES = {
-    "black": "tests/test_black.py", #fail- dependency error
+    "ansible": "test/ansible_test/unit/test_diff.py",
+    "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
-    "cookiecutter": "tests/test_main.py", #fail- dependency error
+    "cookiecutter": "tests/test_generate_file.py", 
     "expression": "tests/test_expression.py",
     "fastapi": "tests/test_additional_properties.py",
-    "keras": "tests/test_loss_masking.py", #fail- dependency error
+    "httpie": "tests/test_binary.py",
+    "keras": "tests/test_loss_masking.py", 
     "luigi": "test/factorial_test.py",
     "markup": "tests/test_markup.py",
+    "matplotlib": "tests.py",
     "middle": "tests/test_middle.py",
-    "pysnooper": "tests/test_pysnooper.py", #fail- import error
+    "pandas": "pandas/tests/arithmetic/test_numeric.py",
+    "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_app.py",
     "scrapy": "tests/test_mail.py",
+    "spacy": "spacy/tests/test_displacy.py",
     "thefuck": "tests/test_logs.py",
     "tornado": "tornado/test/options_test.py",
     "tqdm": "tqdm/tests/tests_version.py",
-    "youtubedl": "test/test_aes.py"
+    "youtubedl": "test/test_age_restriction.py"
 }
 
 # Record the statement of a test class from each Tests4Py programs that is compatible to environment. 
@@ -73,7 +77,7 @@ def main():
     if not file_path.exists():
         df = pd.DataFrame(columns=[
             "program_name",
-            "included",
+            "usable",
             "llm_test_file",
             "builds",
             "passes",
@@ -87,7 +91,7 @@ def main():
 
     df = pd.read_csv(file_path)
     
-    # Use one project and its buggy versions
+    # Use one project
     if args.project:
         if args.project not in PROJECTS:
             sys.exit(f"Unknown project: {args.project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
@@ -135,11 +139,11 @@ def main():
                         coverage_before = line.split()[-1].replace("%", "")
                         break
                     
-                # If pytest or import error has occurred, then program isn't used for experiment
+                # If pytest or import error has occurred, then program isn't usable for experiment
                 if coverage_before == "":
                     new_row = {
                         "program_name": program_name,
-                        "included": False,
+                        "usable": False,
                         "llm_test_file": "",
                         "builds": "",
                         "passes": "",
@@ -149,12 +153,12 @@ def main():
                         "kept": "",
                         "discard_reason": ""
                     }
-                    print("IM HERE AT 1 ")
+                    print("ERROR: CANNOT COLLECT COVERAGE...")
                 else:
         
                     new_row = {
                         "program_name": program_name,
-                        "included": True,
+                        "usable": True,
                         "llm_test_file": "",
                         "builds": "",
                         "passes": "",
@@ -164,13 +168,13 @@ def main():
                         "kept": "",
                         "discard_reason": ""
                     }
-                    print("IM HERE AT 2 ")
+                    print("SUCCESS: COVERAGE COLLECTED...")
 
-            # fails to do pip install -e .
+            # Fails to do pip install -e . for installing packages
             else:
                 new_row = {
                     "program_name": program_name,
-                    "included": False,
+                    "usable": False,
                     "llm_test_file": "",
                     "builds": "",
                     "passes": "",
