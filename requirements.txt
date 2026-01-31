@@ -2,3 +2,4 @@ pytest
 pytest-cov
 pandas
 tests4py
+pytest-twisted

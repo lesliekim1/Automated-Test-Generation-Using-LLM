@@ -29,6 +29,25 @@ PROJECTS = {
     "youtubedl": 43,
 }
 
+TEST_FILES = {
+    "black": "tests/test_black.py", #fail- dependency error
+    "calculator": "tests/test_calc.py", 
+    "cookiecutter": "tests/test_main.py", #fail- dependency error
+    "expression": "tests/test_expression.py",
+    "fastapi": "tests/test_additional_properties.py",
+    "keras": "tests/test_loss_masking.py", #fail- dependency error
+    "luigi": "test/factorial_test.py",
+    "markup": "tests/test_markup.py",
+    "middle": "tests/test_middle.py",
+    "pysnooper": "tests/test_pysnooper.py", #fail- import error
+    "sanic": "tests/test_app.py",
+    "scrapy": "tests/test_mail.py",
+    "thefuck": "tests/test_logs.py",
+    "tornado": "tornado/test/options_test.py",
+    "tqdm": "tqdm/tests/tests_version.py"
+    "youtubedl": "test/test_aes.py"
+}
+
 def main():
     parser = argparse.ArgumentParser(description = "get statement coverage of a test class from " \
     "each Tests4Py project.")
@@ -85,13 +104,45 @@ def main():
             print(f"BASELINE COVERAGE {project}_{bug_id}... ")
             
             if bug_id == 1:
-                # run 'pip install -e .' only on each project_1 
+                # Run 'pip install -e .' only on each project_1 to make sure that it's compatible to environment
                 result = subprocess.run(
                     [str(pip), "install", "-e", "."],
                     cwd=str(project_dir)
                     )
 
             if result.returncode == 0:
+                
+                # Select one test class only for each compatible project
+                test_file = project_dir / "tests" / "test_black.py"
+
+                result2 = subprocess.run(
+                    [str(pytest), str(test_file), "--cov=black", "--cov-report=term"],
+                    cwd=str(project_dir),
+                    stdout=subprocess.PIPE,
+                    text=True
+                )
+
+                if result2 != 0:
+                    new_row = {
+                        "program_name": program_name,
+                        "included": False,
+                        "llm_test_file": "",
+                        "builds": "",
+                        "passes": "",
+                        "coverage_before": "",
+                        "coverage_after": "",
+                        "coverage_delta": "",
+                        "kept": "",
+                        "discard_reason": ""
+                    }
+                
+                elif project == "calculator":
+                    test_file = tmp_dir / "f{project}_{bug_id}" / "tests" / "test_calc.py"
+                    result2 = subprocess.run(
+                        [str(pytest), f"--cov={test_file}"]
+                    )
+
+
                 new_row = {
                     "program_name": program_name,
                     "included": True,
@@ -104,6 +155,7 @@ def main():
                     "kept": "",
                     "discard_reason": ""
                 }
+
             else:
                 new_row = {
                     "program_name": program_name,

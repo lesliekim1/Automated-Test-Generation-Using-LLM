@@ -6,8 +6,6 @@ The goal of this research project is to evaluate whether applying the same metho
 
 ## Installation
 
-This project used **Python 3.10.9**. 
-
 The `requirements.txt` file lists all Python libraries required for this project.
 Install them using:
 
