@@ -22,16 +22,13 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 ## Scripts
 
 - [p01_setup.py](scripts/p01_setup.py) Add all Tests4Py projects (or a single project using --project, -p) into tmp/.
-
 - [p02_baseline_coverage.py](scripts/p02_baseline_coverage.py) Run a test class for each Tests4Py project (or a single project using --project, -p).
-
 - p03_generate_llm_tests.py
-
-- p04_llm_coverage.py
-
-- p05_filters.py
-
-- p06_analysis.py
+- p04_build_filter.py
+- p05_pass_filter.py
+- p06_llm_coverage.py
+- p07_coverage_improvement_filter.py
+- p08_analysis.py
   
 ## References
 
