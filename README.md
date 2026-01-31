@@ -6,6 +6,8 @@ The goal of this research project is to evaluate whether applying the same metho
 
 ## Installation
 
+This project used **Python 3.10.9**. 
+
 The `requirements.txt` file lists all Python libraries required for this project.
 Install them using:
 
@@ -21,9 +23,9 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 
 ## Scripts
 
-- [p01_setup.py](scripts/p01_setup.py) Add all Tests4Py projects (or a single project using `--project` or `-p`) into `tmp/`.
+- [p01_setup.py](scripts/p01_setup.py) Add all Tests4Py projects (or a single project using --project, -p) into tmp/.
 
-- [p02_baseline_coverage.py]() Run the original test suites to record statement coverages.
+- [p02_baseline_coverage.py](scripts/p02_baseline_coverage.py) Run the original test suites to record statement coverages.
   
 ## References
 
