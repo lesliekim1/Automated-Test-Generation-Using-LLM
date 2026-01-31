@@ -1,4 +1,5 @@
 tmp/
+scripts/tmp/
 __pycache__/
 *.pyc
 *$py.class
