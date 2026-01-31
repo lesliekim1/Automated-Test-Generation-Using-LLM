@@ -122,9 +122,21 @@ def main():
                     text=True
                 )
 
-                print(result.stdout)
+                print("--STATEMENT COVERAGE--")
+                print(result2.stdout)
 
-                if result2.returncode != 0:
+                coverage_before = ""
+                # Split coverage report into list of lines
+                for line in result2.stdout.splitlines():
+                    line = line.strip()
+
+                    # Last substring is coverage number
+                    if line.startswith("TOTAL"):
+                        coverage_before = line.split()[-1].replace("%", "")
+                        break
+                    
+                # If pytest or import error has occurred, then program isn't used for experiment
+                if coverage_before == "":
                     new_row = {
                         "program_name": program_name,
                         "included": False,
@@ -137,18 +149,9 @@ def main():
                         "kept": "",
                         "discard_reason": ""
                     }
+                    print("IM HERE AT 1 ")
                 else:
-
-                    coverage_before = ""
-                    # Split coverage report into list of lines
-                    for line in result2.stdout.splitlines():
-                        line = line.strip()
-
-                        # Last substring is coverage number
-                        if line.startswith("TOTAL"):
-                            coverage_before = line.split()[-1].replace("%", "")
-                            break
-                                                  
+        
                     new_row = {
                         "program_name": program_name,
                         "included": True,
@@ -161,6 +164,7 @@ def main():
                         "kept": "",
                         "discard_reason": ""
                     }
+                    print("IM HERE AT 2 ")
 
             # fails to do pip install -e .
             else:
