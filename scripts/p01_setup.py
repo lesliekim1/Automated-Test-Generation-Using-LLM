@@ -27,7 +27,36 @@ PROJECTS = {
     "youtubedl": 43,
 }
 
-# Retrieve and add Tests4Py project(s) into tmp folder using t4p. 
+# Purpose: Get all selected projects to be retrieved.
+# Parameters: project (project from argument)
+# Return: dict of projects
+def select_projects(project):
+    # Single project
+    if project:
+        if project not in PROJECTS:
+            sys.exit(f"Unknown project: {project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
+        chosen_projects = {project: PROJECTS[project]} 
+        
+    # All projects
+    else:
+        chosen_projects = PROJECTS
+    return chosen_projects
+
+# Purpose: Retrieve all chosen project(s) by using t4p checkout.
+# Parameters: chosen_projects (projects to be retrieved), t4p (t4p executable), 
+#             tmp_dir (tmp folder), scripts_dir (scripts folder)
+# Return: none
+def t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir):
+    for project, num_bugs in chosen_projects.items():
+        for bug_id in range(1, num_bugs+1):
+            print(f"RUNNING: t4p checkout -p {project} -i {bug_id} -w scripts/tmp ... ")
+
+            subprocess.run(
+                [str(t4p), "checkout", "-p", project, "-i", str(bug_id), "-w", str(tmp_dir)],
+                cwd=str(scripts_dir)
+            )
+
+# Retrieve and add Tests4Py project(s) into tmp folder using t4p checkout. 
 def main():
     parser = argparse.ArgumentParser(description = "checkout all Tests4Py projects.")
 
@@ -36,33 +65,18 @@ def main():
         help="checkout a single project."
     )
 
-    # scripts is the root dir
     args = parser.parse_args()
-    root_dir = Path(__file__).absolute().parent
-    t4p = root_dir.parent /".venv" / "Scripts" / "t4p.exe"
+    scripts_dir = Path(__file__).absolute().parent
+    t4p = scripts_dir.parent /".venv" / "Scripts" / "t4p.exe"
 
     # Create tmp dir to store Tests4Py projects
-    tmp_dir = root_dir / "tmp"
+    tmp_dir = scripts_dir / "tmp"
     tmp_dir.mkdir(exist_ok=True)
-
-    # Checkout a single project
-    if args.project:
-        if args.project not in PROJECTS:
-            sys.exit(f"Unknown project: {args.project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
-        t4p_projects = {args.project: PROJECTS[args.project]} 
-        
-    # Checkout all projects
-    else:
-        t4p_projects = PROJECTS
+     
+    chosen_projects = select_projects(args.project)
     
-    for project, num_bugs in t4p_projects.items():
-        for bug_id in range(1, num_bugs+1):
-            print(f"CHECKOUT {project}_{bug_id}... ")
-
-            subprocess.run(
-                [str(t4p), "checkout", "-p", project, "-i", str(bug_id), "-w", str(tmp_dir)],
-                cwd=str(root_dir)
-            )
+    # t4p checkout all chosen project(s)
+    t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir)
 
 if __name__ == "__main__":
     main()
