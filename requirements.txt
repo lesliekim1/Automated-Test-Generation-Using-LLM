@@ -5,3 +5,4 @@ tests4py
 pytest-twisted
 twisted
 ollama
+numpy

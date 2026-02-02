@@ -30,7 +30,7 @@ PROJECTS = {
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/ansible_test/unit/test_diff.py",
+    "ansible": "test/units/errors/test_errors.py",
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
@@ -60,6 +60,7 @@ def read_csv(file_path):
     if not file_path.exists():
         df = pd.DataFrame(columns=[
             "program_name",
+            "test_file",
             "usable",
             "llm_test_file",
             "builds",
@@ -112,8 +113,9 @@ def main():
     args = parser.parse_args()
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
-    pytest = scripts_dir.parent /".venv" / "Scripts" / "pytest.exe"
-    pip = scripts_dir.parent /".venv" / "Scripts" / "pip.exe"
+    #pytest = scripts_dir.parent /".venv" / "Scripts" / "pytest.exe" #hard coded for windows
+    #pip = scripts_dir.parent /".venv" / "Scripts" / "pip.exe" #hard coded for windows
+    python = sys.executable # for WSL environment
 
     # Create results dir in scripts dir to store CSV file
     results_dir = scripts_dir.parent / "results"
@@ -135,10 +137,16 @@ def main():
             
             # Run 'pip install -e' on project's first buggy version
             if bug_id == 1:
-                result = subprocess.run(
-                    [str(pip), "install", "-e", "."],
-                    cwd=str(project_dir)
-                    )
+                # Skip pip install to avoid getting pip errors
+                if project == "ansible":
+                    result = subprocess.CompletedProcess(args=[], returncode=0)
+
+                else:
+                    result = subprocess.run(
+                        # str(pip)
+                        [python, "-m", "pip", "install", "-e", "."],
+                        cwd=str(project_dir)
+                        )
 
             # If environment is compatible after installing project's packages
             if result.returncode == 0:
@@ -147,7 +155,8 @@ def main():
                 
                 # Attempt to run pytest --cov to get statement coverage and record it 
                 result2 = subprocess.run(
-                    [str(pytest), str(test_file), "--cov", "--cov-report=term"],
+                    # str(pytest)
+                    [python, "-m", "pytest", str(test_file), "--cov", "--cov-report=term"],
                     cwd=str(project_dir),
                     stdout=subprocess.PIPE,
                     text=True
@@ -161,6 +170,7 @@ def main():
                 if coverage_before is None:
                     new_row = {
                         "program_name": program_name,
+                        "test_file": Path(TEST_FILES[project]).name,
                         "usable": False,
                         "llm_test_file": "",
                         "builds": "",
@@ -177,6 +187,7 @@ def main():
                 else:
                     new_row = {
                         "program_name": program_name,
+                        "test_file": Path(TEST_FILES[project]).name,
                         "usable": True,
                         "llm_test_file": "",
                         "builds": "",
@@ -193,6 +204,7 @@ def main():
             else:
                 new_row = {
                     "program_name": program_name,
+                    "test_file": Path(TEST_FILES[project]).name,
                     "usable": False,
                     "llm_test_file": "",
                     "builds": "",
