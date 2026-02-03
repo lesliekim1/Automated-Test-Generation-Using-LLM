@@ -1,0 +1,4 @@
+program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason
+pysnooper_1,test_pysnooper.py,True,,,,58.0,,,,
+pysnooper_2,test_pysnooper.py,True,,,,46.0,,,,
+pysnooper_3,test_pysnooper.py,True,,,,58.0,,,,

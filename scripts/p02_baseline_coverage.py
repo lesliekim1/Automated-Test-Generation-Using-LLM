@@ -42,9 +42,9 @@ TEST_FILES = {
     "markup": "tests/test_markup.py", #
     "matplotlib": "lib/matplotlib/tests/test_container.py", #
     "middle": "tests/test_middle.py", #
-    "pandas": "pandas/tests/dtypes/test_missing.py",
-    "pysnooper": "tests/test_pysnooper.py", 
-    "sanic": "tests/test_app.py",
+    "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
+    "pysnooper": "tests/test_pysnooper.py", #
+    "sanic": "tests/test_middleware.py", #
     "scrapy": "tests/test_mail.py",
     "spacy": "spacy/tests/test_displacy.py",
     "thefuck": "tests/test_logs.py",
@@ -137,7 +137,7 @@ def main():
 
             if bug_id == 1:
                 # Skip pip install to avoid getting pip errors to get coverage
-                if project == "ansible" or project == "keras" or project == "pandas":
+                if project == "ansible" or project == "keras" or project == "sanic":
                     result = subprocess.CompletedProcess(args=[], returncode=0)
 
                 else:

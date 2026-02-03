@@ -14,4 +14,6 @@ matplotlib
 Cython==0.29.37
 future
 starlette==0.13.2
-pandas
+python-toolbox
+decorator
+httpx<0.24
