@@ -1,0 +1,5 @@
+program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason
+cookiecutter_1,test_generate_file.py,True,,,,44,,,,
+cookiecutter_2,test_generate_file.py,True,,,,45,,,,
+cookiecutter_3,test_generate_file.py,True,,,,41,,,,
+cookiecutter_4,test_generate_file.py,True,,,,42,,,,

@@ -30,19 +30,19 @@ PROJECTS = {
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py",
-    "black": "tests/test_black.py", 
-    "calculator": "tests/test_calc.py", 
-    "cookiecutter": "tests/test_generate_file.py", 
-    "expression": "tests/test_expression.py",
-    "fastapi": "tests/test_additional_properties.py",
-    "httpie": "tests/test_binary.py",
-    "keras": "tests/test_loss_masking.py", 
-    "luigi": "test/factorial_test.py",
-    "markup": "tests/test_markup.py",
-    "matplotlib": "tests.py",
-    "middle": "tests/test_middle.py",
-    "pandas": "pandas/tests/arithmetic/test_numeric.py",
+    "ansible": "test/units/errors/test_errors.py", #
+    "black": "tests/test_black.py", #
+    "calculator": "tests/test_calc.py", #
+    "cookiecutter": "tests/test_generate_file.py", #
+    "expression": "tests/test_expression.py", # 
+    "fastapi": "tests/test_jsonable_encoder.py", #
+    "httpie": "tests/test_exit_status.py", #
+    "keras": "tests/test_loss_masking.py", #
+    "luigi": "test/factorial_test.py", #
+    "markup": "tests/test_markup.py", #
+    "matplotlib": "lib/matplotlib/tests/test_container.py", #
+    "middle": "tests/test_middle.py", #
+    "pandas": "pandas/tests/dtypes/test_missing.py",
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_app.py",
     "scrapy": "tests/test_mail.py",
@@ -115,7 +115,7 @@ def main():
     tmp_dir = scripts_dir / "tmp"
     #pytest = scripts_dir.parent /".venv" / "Scripts" / "pytest.exe" #hard coded for windows
     #pip = scripts_dir.parent /".venv" / "Scripts" / "pip.exe" #hard coded for windows
-    python = sys.executable # for WSL environment
+    python = sys.executable # for WSL terminal
 
     # Create results dir in scripts dir to store CSV file
     results_dir = scripts_dir.parent / "results"
@@ -134,11 +134,10 @@ def main():
 
             # Attempt to install the project's packages to ensure that environment is compatible
             print(f"CHECKING IF {project}_{bug_id} IS USABLE ... ")
-            
-            # Run 'pip install -e' on project's first buggy version
+
             if bug_id == 1:
-                # Skip pip install to avoid getting pip errors
-                if project == "ansible":
+                # Skip pip install to avoid getting pip errors to get coverage
+                if project == "ansible" or project == "keras" or project == "pandas":
                     result = subprocess.CompletedProcess(args=[], returncode=0)
 
                 else:
@@ -146,7 +145,7 @@ def main():
                         # str(pip)
                         [python, "-m", "pip", "install", "-e", "."],
                         cwd=str(project_dir)
-                        )
+                    )
 
             # If environment is compatible after installing project's packages
             if result.returncode == 0:

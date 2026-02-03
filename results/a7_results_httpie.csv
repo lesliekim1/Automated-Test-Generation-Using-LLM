@@ -1,0 +1,6 @@
+program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason
+httpie_1,test_exit_status.py,True,,,,57.0,,,,
+httpie_2,test_exit_status.py,True,,,,57.0,,,,
+httpie_3,test_exit_status.py,True,,,,57.0,,,,
+httpie_4,test_exit_status.py,True,,,,56.0,,,,
+httpie_5,test_exit_status.py,False,,,,,,,,
