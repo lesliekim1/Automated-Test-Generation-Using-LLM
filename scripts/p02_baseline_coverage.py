@@ -45,8 +45,8 @@ TEST_FILES = {
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
     "pysnooper": "tests/test_pysnooper.py", #
     "sanic": "tests/test_middleware.py", #
-    "scrapy": "tests/test_mail.py",
-    "spacy": "spacy/tests/test_displacy.py",
+    "scrapy": "tests/test_command_fetch.py", #
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
     "thefuck": "tests/test_logs.py",
     "tornado": "tornado/test/options_test.py",
     "tqdm": "tqdm/tests/tests_version.py",
@@ -136,8 +136,8 @@ def main():
             print(f"CHECKING IF {project}_{bug_id} IS USABLE ... ")
 
             if bug_id == 1:
-                # Skip pip install to avoid getting pip errors to get coverage
-                if project == "ansible" or project == "keras" or project == "sanic":
+                # Skip pip install if needed
+                if project == "spacy":
                     result = subprocess.CompletedProcess(args=[], returncode=0)
 
                 else:
