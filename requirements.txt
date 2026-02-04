@@ -19,3 +19,4 @@ decorator
 httpx<0.24
 testfixtures
 thinc<8
+colorama
