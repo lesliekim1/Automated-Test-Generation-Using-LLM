@@ -2,7 +2,7 @@
 
 This repository contains scripts for a replication study of Meta’s LLM-based automated unit test generation method [1], evaluated on the Tests4Py benchmark [2] using Python and pytest.
 
-The goal of this research project is to evaluate whether applying the same method described in Meta’s study results in similar success rate trends on the Tests4Py benchmark.
+The goal of this research project is to evaluate whether applying the same method described in Meta’s study results in similar overall and filter success rates on the Tests4Py benchmark.
 
 ## Installation
 
@@ -13,10 +13,10 @@ Install them using:
 pip install -r requirements.txt
 ```
 
-To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) CLI (`t4p`), activate the virtual environment in the Windows Subsystem for Linux (WSL) using:
+To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) CLI (`t4p`), activate the virtual environment using:
 
 ```bash
-source .venv/bin/activate
+.venv\Scripts\activate
 ```
 
 ## Scripts
