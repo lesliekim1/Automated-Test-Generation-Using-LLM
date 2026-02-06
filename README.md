@@ -1,8 +1,6 @@
 # Automated-Test-Generation-Using-LLM
 
-This repository contains scripts for a replication study of Meta’s LLM-based automated unit test generation method [1], evaluated on the Tests4Py benchmark [2] using Python and pytest.
-
-The goal of this research project is to evaluate whether applying the same method described in Meta’s study results in similar overall and filter success rates on the Tests4Py benchmark.
+This repository contains scripts for a replication study of Meta’s TestGen-LLM method [1], using Python and pytest. Its purpose is to evaluate whether applying Meta's TestGen-LLM method on the Tests4Py benchmark [2] results in similar overall and filter success rates on the Tests4Py benchmark to those reported in Meta's study.
 
 ## Installation
 
@@ -19,13 +17,47 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 .venv\Scripts\activate
 ```
 
+### Ollama
+
+This project uses [Ollama](https://ollama.com/) to run large language models locally for automated test generation. Install the models:
+- [llama3.2:3b](https://ollama.com/library/llama3.2:3b)
+
 ## Scripts
 
-- [p01_setup.py](scripts/p01_setup.py) Add all Tests4Py projects (or a single project using -p, --project) into tmp/.
-- [p02_baseline_coverage.py](scripts/p02_baseline_coverage.py) Run a test file from each Tests4Py project (or a single project using -p, --project) to get statement coverage.
-- [p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py) Prompt an LLM (using -m, --model (default: Llama)) to generate extended test class for each usable project (or a single project using -p, --project). LLM-generated test files and prompt mode are recorded to results.csv. 
-    - -n 1 : test only prompt mode (use test file only)
-    - -n 2 : test and class under test (CUT) prompt mode (use both test file and CUT file)
+[p01_setup.py](scripts/p01_setup.py)
+```bash
+usage: p01_setup.py [-h] [-p PROJECT]
+
+checkout all Tests4Py projects.
+
+options:
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   checkout a single project.
+```
+  
+[p02_baseline_coverage.py](scripts/p02_baseline_coverage.py)
+```bash
+usage: p02_baseline_coverage.py [-h] [-p PROJECT]
+
+get statement coverage of a test class from each Tests4Py project.
+
+options:
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   get statment coverage for a single project.
+```
+[p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py)
+```bash
+usage: p03_generate_llm_tests.py [-h] [-m MODEL] [-p PROJECT] [-n NUMBER]
+
+generate and output extended test file
+
+options:
+  -h, --help              show this help message and exit
+  -m, --model MODEL       select an LLM to generate extended test file(s).
+  -p, --project PROJECT   generate extended test file for a single project.
+  -n, --number NUMBER     1 = test only, any other value = test and class under test.
+
+```
 - p04_build_filter.py
 - p05_pass_filter.py
 - p06_llm_coverage.py
