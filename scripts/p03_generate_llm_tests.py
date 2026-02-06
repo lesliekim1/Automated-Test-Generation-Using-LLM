@@ -29,64 +29,69 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# Large Language Models (LLMs) options
-LLAMA = "llama3.1:8b"
+LLMS = {
+    "llama": "llama3.2:3b"
+}
 
+# Purpose: Check if project input is valid.
+# Parameters: project (project from argument)
+# Return: end program if invalid
+def validate_project(project):
+    if project:
+        if project not in TEST_FILES:
+            sys.exit(
+                f"Unknown project: {project}\n"
+                "Available Tests4Py projects:\n" +
+                "\n".join(sorted(TEST_FILES.keys()))
+            )  
 
-# OLD PRACTICE CODE: (to be removed later)
-'''
-desired_model = "llama3.1:8b"
-prompt = "What is one plus two?" # this is a test, not to be used for final code!
-
-response = ollama.chat(model=desired_model, messages=[
-    {
-        "role": "user",
-        "content": prompt,
-    },
-])
-
-ollama_response = response["message"]["content"]
-print(ollama_response)
-
-with open("C:/CAPSTONE/Automated-Test-Generation-Using-LLM/tmp_practice/OUTPUT/OutputOllama.txt", "w", encoding="utf-8") as text_file:
-    text_file.write(ollama_response)
-'''
-
+# Purpose: Check if LLM model is valid.
+# Parameters: model (model from argument)
+# Return: end program if invalid
+def validate_model(model):
+    if model not in LLMS:
+        sys.exit(
+            f"Available LLMs:\n" +
+            "\n".join(sorted(LLMS.keys()))
+        )   
 
 # Prompt an LLM to generate an extended test class file and output it to same path as the original test class
 def main():
     parser = argparse.ArgumentParser(description = "generate and output extended test file")
     
-    '''
     parser.add_argument(
         "-m", "--model",
         default="llama",
         help="select an LLM to generate extended test file(s).",
     )
-    '''
     
     parser.add_argument(
         "-p", "--project",
         help="generate extended test file for a single project."
     )
     
-    # Directory paths
+    # Check valid argument(s)
     args = parser.parse_args()
+    validate_project(args.project)
+    validate_model(args.model)
+    
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / "results.csv"
     
-    df_tmp = pd.read_csv(results_csv)
-    df = df_tmp[df_tmp["usable"] == True]
+    # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
+    df = pd.read_csv(results_csv)
+    df["llm_test_file"] = df["llm_test_file"].astype("string")
+    df_usable = df[df["usable"] == True]
 
     # Select a single project only
     if args.project:
-        df = df[df["program_name"].str.startswith(args.project + "_")]
+        df_usable = df_usable[df_usable["program_name"].str.startswith(args.project + "_")]
     
-    print(f"MODEL: {args.model}")
+    print(f"MODEL: {LLMS[args.model]}")
 
-    for index, row in df.iterrows():
+    for index, row in df_usable.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
         project = program_name.split("_")[0]
@@ -110,29 +115,31 @@ def main():
         """
         
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
-        
-        if (args.model == "llama"):
-            # Prompt Llama to generate an extended test suite
-            try:
-                response = ollama.chat(model=LLAMA, messages=[
-                    {
-                        "role": "user",
-                        "content": prompt,
-                    },
-                ])
+        output_file = original_test_file.with_name(args.model.upper() + "_" + original_test_file.stem + ".py")
+         
+        # Prompt an LLM (default: Llama) to generate an extended test suite
+        try:
+            response = ollama.chat(model=LLMS[args.model], messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ])
                 
-                ollama_response = response["message"]["content"]
-                print(ollama_response)
-                
-                # write to file
-                
-                print(f"SUCCESS: GENERATED TEST FOR {program_name} ...\n")
+            llm_response = response["message"]["content"]               
+            print(f"SUCCESS: GENERATED TEST FOR {program_name} ...\n\t--> {output_file}\n")
             
-            except Exception as e:
-                print(f"**ERROR: FAILED TO GENERATE FOR {program_name} ...\n")
-                continue
+        except Exception as e:
+            print(f"**ERROR: FAILED TO GENERATE FOR {program_name}: {e} ...\n")
+            continue
             
-    # df.to_csv(file_path, index=False)
-
+        # Output to file in same path as the original test class
+        with open(output_file, "w", encoding="utf-8") as py_file:
+            py_file.write(llm_response)
+            
+        df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name
+            
+    df.to_csv(results_csv, index=False)
+    
 if __name__ == "__main__":
     main()

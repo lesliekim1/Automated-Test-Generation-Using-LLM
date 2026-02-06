@@ -23,7 +23,7 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 
 - [p01_setup.py](scripts/p01_setup.py) Add all Tests4Py projects (or a single project using -p, --project) into tmp/.
 - [p02_baseline_coverage.py](scripts/p02_baseline_coverage.py) Run a test file from each Tests4Py project (or a single project using -p, --project) to get statement coverage.
-- [p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py) Prompt an LLM (Llama 3.1 8B) to generate extended test class for each usable project.
+- [p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py) Prompt an LLM (using -m, --model (default: Llama)) to generate extended test class for each usable project (or a single project using -p, --project).
 - p04_build_filter.py
 - p05_pass_filter.py
 - p06_llm_coverage.py
