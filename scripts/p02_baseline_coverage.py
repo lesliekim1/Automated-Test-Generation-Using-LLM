@@ -42,11 +42,11 @@ TEST_FILES = {
     "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", 
     "middle": "tests/test_middle.py", 
-    "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
+    "pandas": "pandas/tests/arithmetic/test_numeric.py", 
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
     "scrapy": "tests/test_command_fetch.py", 
-    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", 
     "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
     "tqdm": "tqdm/tests/tests_tqdm.py",
@@ -69,7 +69,8 @@ def read_csv(file_path):
             "coverage_after",
             "coverage_delta",
             "kept",
-            "discard_reason"
+            "discard_reason",
+            "prompt_mode": ""
         ])
         df.to_csv(file_path, index=False)
     return pd.read_csv(file_path)
@@ -178,7 +179,8 @@ def main():
                         "coverage_after": "",
                         "coverage_delta": "",
                         "kept": "",
-                        "discard_reason": ""
+                        "discard_reason": "",
+                        "prompt_mode": ""
                     }
                     print("ERROR: CANNOT COLLECT COVERAGE ...")
 
@@ -195,7 +197,8 @@ def main():
                         "coverage_after": "",
                         "coverage_delta": "",
                         "kept": "",
-                        "discard_reason": ""
+                        "discard_reason": "",
+                        "prompt_mode": ""
                     }
                     print("SUCCESS: COVERAGE COLLECTED ...")
 
@@ -212,7 +215,8 @@ def main():
                     "coverage_after": "",
                     "coverage_delta": "",
                     "kept": "",
-                    "discard_reason": ""
+                    "discard_reason": "",
+                    "prompt_mode": ""
                 }
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     df.to_csv(file_path, index=False)

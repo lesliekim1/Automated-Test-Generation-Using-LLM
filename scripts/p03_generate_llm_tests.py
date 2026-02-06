@@ -18,17 +18,43 @@ TEST_FILES = {
     "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", 
     "middle": "tests/test_middle.py", 
-    "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
+    "pandas": "pandas/tests/arithmetic/test_numeric.py", 
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
     "scrapy": "tests/test_command_fetch.py", 
-    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py",
     "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
     "tqdm": "tqdm/tests/tests_tqdm.py",
     "youtubedl": "test/test_age_restriction.py"
 }
 
+# A chosen "class under test" (CUT) file to give the LLM an example reference
+CUT_FILES = {
+    "ansible": "build/lib/ansible/errors/__init__.py", 
+    "black": "black.py", 
+    "calculator": "src/calc/__init__.py", 
+    "cookiecutter": "cookiecutter/generate.py", 
+    "expression": "src/expression/expr/arithmetic.py", 
+    "fastapi": "fastapi/encoders.py", 
+    "httpie": "httpie/cli.py", 
+    "keras": "keras/losses.py", 
+    "luigi": "luigi/interface.py", 
+    "markup": "src/markup/__init__.py", 
+    "matplotlib": "lib/matplotlib/container.py", 
+    "middle": "src/middle/__init__.py", 
+    "pandas": "pandas/core/indexes/numeric.py", 
+    "pysnooper": "pysnooper/tracer.py", 
+    "sanic": "sanic/app.py", 
+    "scrapy": "scrapy/commands/fetch.py", 
+    "spacy": "spacy/util.py", 
+    "thefuck": "thefuck/logs.py", 
+    "tornado": "tornado/escape.py", 
+    "tqdm": "tqdm/std.py",
+    "youtubedl": "youtube_dl/YoutubeDL.py"
+}
+
+# LLMs options
 LLMS = {
     "llama": "llama3.2:3b"
 }
@@ -70,6 +96,12 @@ def main():
         help="generate extended test file for a single project."
     )
     
+    parser.add_argument(
+        "-n", "--number",
+        default="1",
+        help="1 = test only, any other value = test and class under test."
+    )
+    
     # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
@@ -82,6 +114,7 @@ def main():
     
     # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
     df = pd.read_csv(results_csv)
+    
     df["llm_test_file"] = df["llm_test_file"].astype("string")
     df_usable = df[df["usable"] == True]
 
@@ -90,6 +123,14 @@ def main():
         df_usable = df_usable[df_usable["program_name"].str.startswith(args.project + "_")]
     
     print(f"MODEL: {LLMS[args.model]}")
+    
+    # TESTONLY = test class only file used, TESTCUT = test class and class under test files used
+    prompt_mode = str(args.number)
+    if prompt_mode == "1":
+        mode = "TESTONLY"
+    else:
+        mode = "TESTCUT"
+    print(f"PROMPT MODE: {mode}")
 
     for index, row in df_usable.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
@@ -100,22 +141,50 @@ def main():
         original_test_file = project_dir / TEST_FILES[project]
         existing_test_class = original_test_file.read_text(encoding="utf-8")
         
-        prompt = f"""
-        Here is a Python unit test class:
+        # Test only mode
+        if (prompt_mode == "1"):
+            df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
+            
+            # Prompt is the same as from Meta's study (output format is instructions for LLM)
+            prompt = f"""
+            Here is a Python unit test class:
 
-        {existing_test_class}
+            {existing_test_class}
 
-        Write an extended version of the test class that includes additional tests to cover some extra corner cases.
+            Write an extended version of the test class that includes additional tests to cover some extra corner cases.
 
-        OUTPUT FORMAT (required):
-        - OUTPUT ONLY PYTHON CODE.
-        - Do NOT include explanations or comments outside the code.
-        - Do NOT wrap the code in backticks (```).
-        - The output must be runnable with pytest.
-        """
+            OUTPUT FORMAT (required):
+            - OUTPUT ONLY PYTHON CODE.
+            - Do NOT include explanations or comments outside the code.
+            - Do NOT wrap the code in backticks (```).
+            - The output must be runnable with pytest.
+            """
+    
+        # Test and class under test mode
+        else:
+            class_under_test_file = project_dir / CUT_FILES[project]
+            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
+            
+            # Prompt is the same as from Meta's study (output format is instructions for LLM)
+            prompt = f"""
+            Here is a Python unit test class and the class that it tests:
+
+            {existing_test_class}
+            
+            {class_under_test}
+
+            Write an extended version of the test class that includes additional unit tests that will increase the test coverage of the class under test.
+
+            OUTPUT FORMAT (required):
+            - OUTPUT ONLY PYTHON CODE.
+            - Do NOT include explanations or comments outside the code.
+            - Do NOT wrap the code in backticks (```).
+            - The output must be runnable with pytest.
+            """
         
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
-        output_file = original_test_file.with_name(args.model.upper() + "_" + original_test_file.stem + ".py")
+        output_file = original_test_file.with_name(args.model.upper() + "_" + mode + "_" + original_test_file.stem + ".py")
          
         # Prompt an LLM (default: Llama) to generate an extended test suite
         try:
