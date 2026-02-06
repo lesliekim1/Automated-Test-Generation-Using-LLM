@@ -49,7 +49,7 @@ options:
 ```bash
 usage: p03_generate_llm_tests.py [-h] [-m MODEL] [-p PROJECT] [-n NUMBER]
 
-generate and output extended test file
+generate and save extended test class to same path as original test class.
 
 options:
   -h, --help              show this help message and exit

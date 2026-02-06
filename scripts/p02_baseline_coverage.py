@@ -70,7 +70,7 @@ def read_csv(file_path):
             "coverage_delta",
             "kept",
             "discard_reason",
-            "prompt_mode": ""
+            "prompt_mode"
         ])
         df.to_csv(file_path, index=False)
     return pd.read_csv(file_path)

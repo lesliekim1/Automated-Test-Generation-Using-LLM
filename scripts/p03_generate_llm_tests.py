@@ -83,7 +83,7 @@ def validate_model(model):
 
 # Prompt an LLM to generate an extended test class file and output it to same path as the original test class
 def main():
-    parser = argparse.ArgumentParser(description = "generate and output extended test file")
+    parser = argparse.ArgumentParser(description = "generate and save extended test class to same path as original test class.")
     
     parser.add_argument(
         "-m", "--model",
