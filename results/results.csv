@@ -40,7 +40,7 @@ black_20,test_black.py,True,,,,33.0,,,,,
 black_21,test_black.py,True,,,,32.0,,,,,
 black_22,test_black.py,True,,,,31.0,,,,,
 black_23,test_black.py,True,,,,29.0,,,,,
-calculator_1,test_calc.py,True,,,,100.0,,,,,
+calculator_1,test_calc.py,True,test_calc_LLAMA_TESTONLY.py,True,False,100.0,,,,2.0,TESTONLY
 cookiecutter_1,test_generate_file.py,True,,,,44.0,,,,,
 cookiecutter_2,test_generate_file.py,True,,,,45.0,,,,,
 cookiecutter_3,test_generate_file.py,True,,,,41.0,,,,,

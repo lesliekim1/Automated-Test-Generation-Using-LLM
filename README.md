@@ -58,10 +58,39 @@ options:
   -n, --number NUMBER     1 = test only, any other value = test and class under test.
 
 ```
-- p04_build_filter.py
-- p05_pass_filter.py
+[p04_build_filter.py](scripts/p04_build_filter.py)
+```bash
+usage: p04_build_filter.py [-h] [-p PROJECT]
+
+check if an LLM-generated test class is built correctly.
+
+options:
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   apply build filter to a single project.
+```
+[p05_pass_filter.py](scripts/p05_pass_filter.py)
+```bash
+usage: p05_pass_filter.py [-h] [-p PROJECT]
+
+check for any flaky behavior by executing the LLM-generated test five times.
+
+options:
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   apply build filter to a single project.
+```
+
 - p06_llm_coverage.py
-- p07_coverage_improvement_filter.py
+- [p07_coverage_improvement_filter.py](p07_coverage_improvement_filter.py)
+```bash
+usage: p07_coverage_improvement_filter.py [-h] [-p PROJECT]
+
+check for if coverage improvement has occurred on LLM-generated tests.
+
+options:
+  -h, --help                      show this help message and exit
+  -p PROJECT, --project PROJECT   run coverage improvement filter for a single project.
+```
+
 - p08_analysis.py
   
 ## References

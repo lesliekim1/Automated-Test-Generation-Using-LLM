@@ -6,7 +6,7 @@ import ollama
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", 
+    "ansible": "test/units/errors/test_errors.py", #
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
@@ -57,6 +57,7 @@ CUT_FILES = {
 # LLMs options
 LLMS = {
     "llama": "llama3.2:3b"
+    #deepseek-coder:1.3b
 }
 
 # Purpose: Check if project input is valid.
@@ -117,6 +118,7 @@ def main():
     
     df["llm_test_file"] = df["llm_test_file"].astype("string")
     df_usable = df[df["usable"] == True]
+    df["prompt_mode"] = df["prompt_mode"].astype("string")
 
     # Select a single project only
     if args.project:
@@ -157,7 +159,6 @@ def main():
             - OUTPUT ONLY PYTHON CODE.
             - Do NOT include explanations or comments outside the code.
             - Do NOT wrap the code in backticks (```).
-            - The output must be runnable with pytest.
             """
     
         # Test and class under test mode
@@ -180,11 +181,10 @@ def main():
             - OUTPUT ONLY PYTHON CODE.
             - Do NOT include explanations or comments outside the code.
             - Do NOT wrap the code in backticks (```).
-            - The output must be runnable with pytest.
             """
         
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
-        output_file = original_test_file.with_name(args.model.upper() + "_" + mode + "_" + original_test_file.stem + ".py")
+        output_file = original_test_file.with_name(original_test_file.stem + "_" + args.model.upper() + "_" + mode + ".py")
          
         # Prompt an LLM (default: Llama) to generate an extended test suite
         try:
