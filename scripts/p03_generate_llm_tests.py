@@ -54,10 +54,10 @@ CUT_FILES = {
     "youtubedl": "youtube_dl/YoutubeDL.py"
 }
 
-# LLMs options
+# LLMs option(s)
 LLMS = {
     "llama": "llama3.2:3b"
-    #deepseek-coder:1.3b
+    #deepseek-coder:1.3b # optional/stretch goal to do
 }
 
 # Purpose: Check if project input is valid.
