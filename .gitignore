@@ -12,6 +12,3 @@ venv/
 htmlcov/
 .pytest_cache/
 .vscode/
-
-# Directory for testing/practicing certain code only
-tmp_practice/

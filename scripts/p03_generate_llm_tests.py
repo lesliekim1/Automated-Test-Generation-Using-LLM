@@ -7,7 +7,7 @@ import ollama
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
     "ansible": "test/units/errors/test_errors.py", #
-    "black": "tests/test_black.py", 
+    "black": "tests/test_black.py", #
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
     "expression": "tests/test_expression.py", 
@@ -117,7 +117,7 @@ def main():
     df = pd.read_csv(results_csv)
     
     df["llm_test_file"] = df["llm_test_file"].astype("string")
-    df_usable = df[df["usable"] == True]
+    df_usable = df[(df["usable"] == True) & df["llm_test_file"].isna()]
     df["prompt_mode"] = df["prompt_mode"].astype("string")
 
     # Select a single project only
@@ -206,9 +206,8 @@ def main():
         with open(output_file, "w", encoding="utf-8") as py_file:
             py_file.write(llm_response)
             
-        df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name
-            
-    df.to_csv(results_csv, index=False)
+        df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name  
+        df.to_csv(results_csv, index=False)
     
 if __name__ == "__main__":
     main()
