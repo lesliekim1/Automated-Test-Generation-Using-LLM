@@ -16,10 +16,10 @@ TEST_FILES = {
     "keras": "tests/test_loss_masking.py", 
     "luigi": "test/factorial_test.py", 
     "markup": "tests/test_markup.py", #
-    "matplotlib": "lib/matplotlib/tests/test_container.py", 
+    "matplotlib": "lib/matplotlib/tests/test_container.py", #
     "middle": "tests/test_middle.py", #
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
-    "pysnooper": "tests/test_pysnooper.py", 
+    "pysnooper": "tests/test_pysnooper.py", #
     "sanic": "tests/test_middleware.py", 
     "scrapy": "tests/test_command_fetch.py", 
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
@@ -57,7 +57,7 @@ CUT_FILES = {
 # LLMs option(s)
 LLMS = {
     "llama": "llama3.2:3b"
-    #deepseek-coder:1.3b # optional/stretch goal to do
+    #deepseek-coder:1.3b or gemma3:4b # optional/stretch goal to do
 }
 
 # Purpose: Check if project input is valid.
@@ -103,6 +103,12 @@ def main():
         help="1 = test only, any other value = test and class under test."
     )
     
+    parser.add_argument(
+        "-f", "--file",
+        default="results.csv",
+        help="CSV filename in results directory that records the data."
+    )
+    
     # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
@@ -111,7 +117,7 @@ def main():
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
     results_dir = scripts_dir.parent / "results"
-    results_csv = results_dir / "results.csv"
+    results_csv = results_dir / args.file
     
     # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
     df = pd.read_csv(results_csv)

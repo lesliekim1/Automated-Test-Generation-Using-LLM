@@ -45,9 +45,10 @@ options:
   -h, --help              show this help message and exit
   -p, --project PROJECT   get statment coverage for a single project.
 ```
+
 [p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py)
 ```bash
-usage: p03_generate_llm_tests.py [-h] [-m MODEL] [-p PROJECT] [-n NUMBER]
+usage: p03_generate_llm_tests.py [-h] [-m MODEL] [-p PROJECT] [-n NUMBER] [-f FILE]
 
 generate and save extended test class to same path as original test class.
 
@@ -56,39 +57,55 @@ options:
   -m, --model MODEL       select an LLM to generate extended test file(s).
   -p, --project PROJECT   generate extended test file for a single project.
   -n, --number NUMBER     1 = test only, any other value = test and class under test.
-
+  -f, --file FILE         CSV filename in results directory that records the data.
 ```
+
 [p04_build_filter.py](scripts/p04_build_filter.py)
 ```bash
-usage: p04_build_filter.py [-h] [-p PROJECT]
+usage: p04_build_filter.py [-h] [-p PROJECT] [-f FILE]
 
 check if an LLM-generated test class is built correctly.
 
 options:
   -h, --help              show this help message and exit
   -p, --project PROJECT   apply build filter to a single project.
+  -f, --file FILE         CSV filename in results directory that records the data.
 ```
+
 [p05_pass_filter.py](scripts/p05_pass_filter.py)
 ```bash
-usage: p05_pass_filter.py [-h] [-p PROJECT]
+usage: p05_pass_filter.py [-h] [-p PROJECT] [-f FILE]
 
 check for any flaky behavior by executing the LLM-generated test five times.
 
 options:
   -h, --help              show this help message and exit
   -p, --project PROJECT   apply build filter to a single project.
+  -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-- p06_llm_coverage.py
-- [p07_coverage_improvement_filter.py](p07_coverage_improvement_filter.py)
+[p06_llm_coverage.py](p06_llm_coverage.py)
 ```bash
-usage: p07_coverage_improvement_filter.py [-h] [-p PROJECT]
+usage: p06_llm_coverage.py [-h] [-p PROJECT] [-f FILE]
+
+get statement coverage of a LLM-generated test class from each Tests4Py project.
+
+options:
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   get statement coverage for a single project.
+  -f, --file FILE         CSV filename in results directory that records the data.
+```
+
+[p07_coverage_improvement_filter.py](p07_coverage_improvement_filter.py)
+```bash
+usage: p07_coverage_improvement_filter.py [-h] [-p PROJECT] [-f FILE]
 
 check for if coverage improvement has occurred on LLM-generated tests.
 
 options:
-  -h, --help                      show this help message and exit
-  -p PROJECT, --project PROJECT   run coverage improvement filter for a single project.
+  -h, --help              show this help message and exit
+  -p, --project PROJECT   run coverage improvement filter for a single project.
+  -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
 - p08_analysis.py

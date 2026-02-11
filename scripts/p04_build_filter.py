@@ -66,6 +66,12 @@ def main():
         help="apply build filter to a single project."
     )
     
+    parser.add_argument(
+        "-f", "--file",
+        default="results.csv",
+        help="CSV filename in results directory that records the data."
+    )
+    
     # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
@@ -73,11 +79,11 @@ def main():
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
     results_dir = scripts_dir.parent / "results"
-    results_csv = results_dir / "results.csv" # edit file name if needed
+    results_csv = results_dir / args.file
     
     # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
     df = pd.read_csv(results_csv)
-    df_usable = df[df["usable"] == True]
+    df_usable = df[(df["usable"] == True) & df["builds"].isna()]
     
     # Select a single project only
     if args.project:
@@ -104,7 +110,7 @@ def main():
         # Record result to csv file
         record_result(df, program_name, result)
     
-    df.to_csv(results_csv, index=False)
+        df.to_csv(results_csv, index=False)
     
 if __name__ == "__main__":
     main()

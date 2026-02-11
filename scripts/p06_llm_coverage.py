@@ -1,12 +1,12 @@
 import argparse
 from pathlib import Path
 import sys
-import pandas as pd
 import subprocess
+import pandas as pd
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", #
+    "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
@@ -22,7 +22,7 @@ TEST_FILES = {
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
     "scrapy": "tests/test_command_fetch.py", 
-    "spacy": "spacy/tests/tokenizer/test_tokenizer.py",
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", 
     "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
     "tqdm": "tqdm/tests/tests_tqdm.py",
@@ -40,28 +40,26 @@ def validate_project(project):
                 "Available Tests4Py projects:\n" +
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
-          
-# Purpose: Update pass column with either true (pass) or false (fails), and update 
-#          discard_reason column with 2 if pass failed.
-# Parameters: df (DataFrame), program_name (program), passes_bool (return value from subprocess 5x)
-# Return: none  
-def record_result(df, program_name, passes_bool):
-    df.loc[df["program_name"] == program_name, "passes"] = passes_bool
-        
-    if not passes_bool:
-        df.loc[df["program_name"] == program_name, "discard_reason"] = 2
-        print("FAILED: FLAKY DETECTED ...")
-    else:
-        df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
-        print("SUCCESS: PASSED 5 TIMES ...")
             
-# Apply Meta's TestGen-LLM's second filter, which is to check for flaky behavior in five executions.
+# Purpose: Parse the coverage report output to get the coverage number only.
+# Parameters: result2 (process' object that captured coverage report output)
+# Return: a number
+def get_coverage_number(result2):
+    for line in result2.stdout.splitlines():
+        line = line.strip()
+
+        # The last substring of the line with TOTAL is coverage number
+        if line.startswith("TOTAL"):
+            return line.split()[-1].replace("%", "")
+
+# Run a LLM-generated test file with pytest from Tests4Py project(s) to record statement coverage.
 def main():
-    parser = argparse.ArgumentParser(description = "check for any flaky behavior by executing the LLM-generated test five times.")
-    
+    parser = argparse.ArgumentParser(description = "get statement coverage of a LLM-generated test class from " \
+    "each Tests4Py project.")
+
     parser.add_argument(
         "-p", "--project",
-        help="apply build filter to a single project."
+        help="get statement coverage for a single project."
     )
     
     parser.add_argument(
@@ -69,25 +67,27 @@ def main():
         default="results.csv",
         help="CSV filename in results directory that records the data."
     )
-    
-    # Check valid argument(s)
+
     args = parser.parse_args()
     validate_project(args.project)
     
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
+    python = sys.executable
+
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
-    
-    # Read results.csv and iterate through any projects that have passed the first (build) filter
+
+    # Read results.csv and iterate through any projects that have passed the previous two filters
     df = pd.read_csv(results_csv)
-    df_pass = df[(df["usable"] == True) & (df["builds"] == True) & df["passes"].isna()]
+    df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True) & df["kept"].isna()]
     
     # Select a single project only
     if args.project:
-        df_pass = df_pass[df_pass["program_name"].str.startswith(args.project + "_")]
-    
-    for index, row in df_pass.iterrows():
+        df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
+        
+    # Run pytest --cov on all chosen projects to get and record coverage to results.csv
+    for index, row in df_cov.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
         project = program_name.split("_")[0]
@@ -97,29 +97,30 @@ def main():
         original_test_file = project_dir / TEST_FILES[project]
         llm_test_path = original_test_file.with_name(str(llm_test_file))
         
-        print(f"[{program_name}] PASS FILTER: {llm_test_file}")
+        print(f"[{program_name}] LLM COVERAGE: {llm_test_file}")
         
-        # Run the pass filter 5 times to catch any flaky behavior
-        passes_bool = True
-        for i in range(5):
-            result = subprocess.run(
-                ["pytest", str(llm_test_path.relative_to(project_dir))],
-                cwd=str(project_dir),
-                stdout=subprocess.PIPE,
-                text=True
-            )
+        # Run pytest --cov on the LLM-generated test file only
+        result2 = subprocess.run(
+            [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
+            cwd=str(project_dir),
+            stdout=subprocess.PIPE,
+            text=True
+        )
+        
+        print("PRINTING STATEMENT COVERAGE ...")
+        print(result2.stdout)
+        coverage_after = get_coverage_number(result2)
+        
+        # If pytest or other errors has occurred, then program failed the third filter
+        if coverage_after is None:
+            df.loc[df["program_name"] == program_name, "coverage_after"] = pd.NA
+            print("ERROR: CANNOT COLLECT COVERAGE ...")
             
-            print(f"RUN #{i+1} ...")
-            print(result.stdout)
+        else:
+            df.loc[df["program_name"] == program_name, "coverage_after"] = int(coverage_after)
+            print("SUCCESS: COVERAGE COLLECTED ...")
             
-            # If a run fails, then it fails the pass filter
-            if (result.returncode != 0):
-                passes_bool = False
-                break
-        
-        record_result(df, program_name, passes_bool)
-        
-    df.to_csv(results_csv, index=False)
-    
+        df.to_csv(results_csv, index=False)
+            
 if __name__ == "__main__":
     main()

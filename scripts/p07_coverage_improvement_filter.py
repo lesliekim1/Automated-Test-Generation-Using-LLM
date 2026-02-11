@@ -63,16 +63,22 @@ def main():
         help="run coverage improvement filter for a single project."
     )
     
+    parser.add_argument(
+        "-f", "--file",
+        default="results.csv",
+        help="CSV filename in results directory that records the data."
+    )
+    
     args = parser.parse_args()
     validate_project(args.project)
     
     scripts_dir = Path(__file__).absolute().parent
     results_dir = scripts_dir.parent / "results"
-    results_csv = results_dir / "results.csv"
+    results_csv = results_dir / args.file
     
     # Read results.csv and iterate through any projects that have passed the build and pass filters
     df = pd.read_csv(results_csv)
-    df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True)]
+    df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True) & (df["coverage_after"].notna()) & (df["kept"].isna())]
     
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
@@ -81,7 +87,7 @@ def main():
         program_name = row["program_name"]
         
         # Calculate coverage_delta and record it
-        coverage_delta = float(row["coverage_after"]) - float(row["coverage_before"])
+        coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
         df.loc[df["program_name"] == program_name, "coverage_delta"] = coverage_delta
 
         # An extended test class is only "kept" when difference is greater than zero
@@ -89,8 +95,7 @@ def main():
         df.loc[df["program_name"] == program_name, "kept"] = kept_bool
         
         record_result(df, program_name, kept_bool, coverage_delta)
-        
-    df.to_csv(results_csv, index=False)
+        df.to_csv(results_csv, index=False)
 
 if __name__ == "__main__":
     main()
