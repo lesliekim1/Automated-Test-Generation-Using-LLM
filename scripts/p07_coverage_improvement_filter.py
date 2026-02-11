@@ -83,6 +83,8 @@ def main():
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
     
+    print(f"CSV FILE: {args.file}")
+    
     for index, row in df_cov.iterrows():
         program_name = row["program_name"]
         

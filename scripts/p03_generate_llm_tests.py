@@ -20,10 +20,10 @@ TEST_FILES = {
     "middle": "tests/test_middle.py", #
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
     "pysnooper": "tests/test_pysnooper.py", #
-    "sanic": "tests/test_middleware.py", 
-    "scrapy": "tests/test_command_fetch.py", 
+    "sanic": "tests/test_middleware.py", #
+    "scrapy": "tests/test_command_fetch.py", #
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
-    "thefuck": "tests/test_logs.py", 
+    "thefuck": "tests/test_logs.py", #
     "tornado": "tornado/test/escape_test.py", 
     "tqdm": "tqdm/tests/tests_tqdm.py",
     "youtubedl": "test/test_age_restriction.py"
@@ -31,7 +31,7 @@ TEST_FILES = {
 
 # A chosen "class under test" (CUT) file to give the LLM an example reference
 CUT_FILES = {
-    "ansible": "build/lib/ansible/errors/__init__.py", 
+    "ansible": "lib/ansible/errors/__init__.py", # ansible_1 has build/lib/..
     "black": "black.py", 
     "calculator": "src/calc/__init__.py", 
     "cookiecutter": "cookiecutter/generate.py", 
@@ -139,6 +139,7 @@ def main():
     else:
         mode = "TESTCUT"
     print(f"PROMPT MODE: {mode}")
+    print(f"CSV FILE: {args.file}")
 
     for index, row in df_usable.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)

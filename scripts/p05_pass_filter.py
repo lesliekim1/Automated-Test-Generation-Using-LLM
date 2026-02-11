@@ -78,6 +78,7 @@ def main():
     tmp_dir = scripts_dir / "tmp"
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
+    python = sys.executable
     
     # Read results.csv and iterate through any projects that have passed the first (build) filter
     df = pd.read_csv(results_csv)
@@ -86,6 +87,8 @@ def main():
     # Select a single project only
     if args.project:
         df_pass = df_pass[df_pass["program_name"].str.startswith(args.project + "_")]
+    
+    print(f"CSV FILE: {args.file}")
     
     for index, row in df_pass.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
@@ -103,7 +106,7 @@ def main():
         passes_bool = True
         for i in range(5):
             result = subprocess.run(
-                ["pytest", str(llm_test_path.relative_to(project_dir))],
+                [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
                 cwd=str(project_dir),
                 stdout=subprocess.PIPE,
                 text=True

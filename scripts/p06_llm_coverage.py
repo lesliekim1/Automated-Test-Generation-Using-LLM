@@ -86,6 +86,8 @@ def main():
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
         
+    print(f"CSV FILE: {args.file}")
+    
     # Run pytest --cov on all chosen projects to get and record coverage to results.csv
     for index, row in df_cov.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)

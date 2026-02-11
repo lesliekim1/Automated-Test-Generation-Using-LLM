@@ -89,6 +89,8 @@ def main():
     if args.project:
         df_usable = df_usable[df_usable["program_name"].str.startswith(args.project + "_")]
     
+    print(f"CSV FILE: {args.file}")
+    
     for index, row in df_usable.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
@@ -98,12 +100,31 @@ def main():
         project_dir = tmp_dir / program_name
         original_test_file = project_dir / TEST_FILES[project]
         llm_test_path = original_test_file.with_name(str(llm_test_file))
+        python = sys.executable
+        
+        print("INSTALLING PACKAGES ...")
+        # Skip pip install if needed (edit the string)
+        if project == "tqdm":
+            result3 = subprocess.CompletedProcess(args=[], returncode=0)
 
+        else:
+            result3 = subprocess.run(
+            # str(pip)
+                [python, "-m", "pip", "install", "-e", "."],
+                cwd=str(project_dir)
+            )
+            
+        if result3.returncode != 0:
+            print("ERROR: PIP INSTALL FAILED ...")
+            record_result(df, program_name, result3)
+            df.to_csv(results_csv, index=False)
+            continue
+                    
         print(f"[{program_name}] BUILD FILTER (pytest --collect-only): {llm_test_file}")
 
         # Run pytest --collect-only to replicate build filter 
         result = subprocess.run(
-            ["pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
+            [python, "-m", "pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
             cwd=str(project_dir)
         )
 
