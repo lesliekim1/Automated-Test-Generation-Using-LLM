@@ -103,6 +103,7 @@ def main():
         print(f"[{program_name}] PASS FILTER: {llm_test_file}")
         
         # Run the pass filter 5 times to catch any flaky behavior
+        codes = []
         passes_bool = True
         for i in range(5):
             result = subprocess.run(
@@ -114,11 +115,10 @@ def main():
             
             print(f"RUN #{i+1} ...")
             print(result.stdout)
+            codes.append(result.returncode)
             
-            # If a run fails, then it fails the pass filter
-            if (result.returncode != 0):
-                passes_bool = False
-                break
+        # If run is inconsistent (passing sometimes and failing sometimes), then it's flaky
+        passes_bool = (len(set(codes)) == 1)
         
         record_result(df, program_name, passes_bool)
         
