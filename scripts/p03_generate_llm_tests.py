@@ -13,9 +13,9 @@ TEST_FILES = {
     "expression": "tests/test_expression.py", #
     "fastapi": "tests/test_jsonable_encoder.py", #
     "httpie": "tests/test_exit_status.py", #
-    "keras": "tests/test_loss_masking.py", 
-    "luigi": "test/factorial_test.py", 
-    "markup": "tests/test_markup.py", #
+    "keras": "tests/test_loss_masking.py", #
+    "luigi": "test/factorial_test.py", #
+    "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", #
     "middle": "tests/test_middle.py", #
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
