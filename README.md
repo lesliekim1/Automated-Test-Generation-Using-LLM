@@ -56,7 +56,7 @@ options:
   -h, --help              show this help message and exit
   -m, --model MODEL       select an LLM to generate extended test file(s).
   -p, --project PROJECT   generate extended test file for a single project.
-  -n, --number NUMBER     1 = test only, any other value = test and class under test.
+  -n, --number NUMBER     1 = extend_test, 2 = extend_coverage, 3 = corner_cases, 4 = statement_to_complete
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 

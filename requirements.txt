@@ -5,3 +5,4 @@ tests4py
 pytest-twisted
 ollama
 pytest-xdist
+twisted

@@ -57,7 +57,6 @@ CUT_FILES = {
 # LLMs option(s)
 LLMS = {
     "llama": "llama3.2:3b"
-    #deepseek-coder:1.3b or gemma3:4b # optional/stretch goal to do
 }
 
 # Purpose: Check if project input is valid.
@@ -100,7 +99,7 @@ def main():
     parser.add_argument(
         "-n", "--number",
         default="1",
-        help="1 = test only, any other value = test and class under test."
+        help="1 = extend_test, 2 = extend_coverage, 3 = corner_cases, 4 = statement_to_complete"
     )
     
     parser.add_argument(
@@ -132,12 +131,19 @@ def main():
     
     print(f"MODEL: {LLMS[args.model]}")
     
-    # TESTONLY = test class only file used, TESTCUT = test class and class under test files used
+    # Prompts are directly from Meta's paper (pg 7)
     prompt_mode = str(args.number)
     if prompt_mode == "1":
-        mode = "TESTONLY"
+        mode = "TESTONLY" # equivalent to extend_test 
+    elif prompt_mode == "2":
+        mode = "TESTCUT" # equivalent to extend_coverage
+    elif prompt_mode == "3":
+        mode = "CORNERCASES"
+    elif prompt_mode == "4":
+        mode = "STATEMENTCOMPLETE"
     else:
-        mode = "TESTCUT"
+        sys.exit("Invalid -n. Use 1, 2, 3, or 4.")
+        
     print(f"PROMPT MODE: {mode}")
     print(f"CSV FILE: {args.file}")
 
@@ -150,7 +156,7 @@ def main():
         original_test_file = project_dir / TEST_FILES[project]
         existing_test_class = original_test_file.read_text(encoding="utf-8")
         
-        # Test only mode
+        # Test only mode (extend_test prompt)
         if (prompt_mode == "1"):
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
@@ -166,10 +172,12 @@ def main():
             - OUTPUT ONLY PYTHON CODE.
             - Do NOT include explanations or comments outside the code.
             - Do NOT wrap the code in backticks (```).
+            - Retain required imports from the original test class so the tests can run.
+            - Preserve the structure of the original test class and extend it.
             """
     
-        # Test and class under test mode
-        else:
+        # Test and class under test mode (extend_coverage prompt)
+        elif (prompt_mode == "2"):
             class_under_test_file = project_dir / CUT_FILES[project]
             class_under_test = class_under_test_file.read_text(encoding="utf-8")
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
@@ -188,6 +196,56 @@ def main():
             - OUTPUT ONLY PYTHON CODE.
             - Do NOT include explanations or comments outside the code.
             - Do NOT wrap the code in backticks (```).
+            - Retain required imports from the original test class so the tests can run.
+            - Preserve the structure of the original test class and extend it.
+            """
+            
+        elif (prompt_mode == "3"):
+            class_under_test_file = project_dir / CUT_FILES[project]
+            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
+            
+            # Prompt is the same as from Meta's study (output format is instructions for LLM)
+            prompt = f"""
+            Here is a Python unit test class and the class that it tests:
+
+            {existing_test_class}
+            
+            {class_under_test}
+
+            Write an extended version of the test class that includes additional unit tests that will cover corner cases missed by the original and will increase the test coverage of the class under test.
+
+            OUTPUT FORMAT (required):
+            - OUTPUT ONLY PYTHON CODE.
+            - Do NOT include explanations or comments outside the code.
+            - Do NOT wrap the code in backticks (```).
+            - Retain required imports from the original test class so the tests can run.
+            - Preserve the structure of the original test class and extend it.
+            """
+            
+        else:
+            class_under_test_file = project_dir / CUT_FILES[project]
+            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
+            
+            # Prompt is the same as from Meta's study (output format is instructions for LLM)
+            prompt = f"""
+            Here is a Python class under test
+            
+            {class_under_test}
+            
+            This class under test can be tested with this Python unit test class 
+
+            {existing_test_class}
+
+            Here is an extended version of the unit test class that includes additional unit test cases that will cover methods, edge cases, corner cases, and other features of the class under test that were missed by the original unit test class:            
+            
+            OUTPUT FORMAT (required):
+            - OUTPUT ONLY PYTHON CODE.
+            - Do NOT include explanations or comments outside the code.
+            - Do NOT wrap the code in backticks (```).
+            - Retain required imports from the original test class so the tests can run.
+            - Preserve the structure of the original test class and extend it.
             """
         
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")

@@ -3,29 +3,30 @@ from pathlib import Path
 import sys
 import pandas as pd
 import subprocess
+import re
 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", #
-    "black": "tests/test_black.py", 
-    "calculator": "tests/test_calc.py", 
-    "cookiecutter": "tests/test_generate_file.py", 
-    "expression": "tests/test_expression.py", 
-    "fastapi": "tests/test_jsonable_encoder.py", 
-    "httpie": "tests/test_exit_status.py", 
-    "keras": "tests/test_loss_masking.py", 
-    "luigi": "test/factorial_test.py", 
-    "markup": "tests/test_markup.py", 
-    "matplotlib": "lib/matplotlib/tests/test_container.py", 
-    "middle": "tests/test_middle.py", 
-    "pandas": "pandas/tests/arithmetic/test_numeric.py", 
-    "pysnooper": "tests/test_pysnooper.py", 
-    "sanic": "tests/test_middleware.py", 
-    "scrapy": "tests/test_command_fetch.py", 
+    "ansible": "test/units/errors/test_errors.py",  #
+    "black": "tests/test_black.py",
+    "calculator": "tests/test_calc.py",
+    "cookiecutter": "tests/test_generate_file.py",
+    "expression": "tests/test_expression.py",
+    "fastapi": "tests/test_jsonable_encoder.py",
+    "httpie": "tests/test_exit_status.py",
+    "keras": "tests/test_loss_masking.py",
+    "luigi": "test/factorial_test.py",
+    "markup": "tests/test_markup.py",
+    "matplotlib": "lib/matplotlib/tests/test_container.py",
+    "middle": "tests/test_middle.py",
+    "pandas": "pandas/tests/arithmetic/test_numeric.py",
+    "pysnooper": "tests/test_pysnooper.py",
+    "sanic": "tests/test_middleware.py",
+    "scrapy": "tests/test_command_fetch.py",
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py",
-    "thefuck": "tests/test_logs.py", 
-    "tornado": "tornado/test/escape_test.py", 
+    "thefuck": "tests/test_logs.py",
+    "tornado": "tornado/test/escape_test.py",
     "tqdm": "tqdm/tests/tests_tqdm.py",
-    "youtubedl": "test/test_age_restriction.py"
+    "youtubedl": "test/test_age_restriction.py",
 }
 
 # Purpose: Check if project input is valid.
@@ -36,11 +37,10 @@ def validate_project(project):
         if project not in TEST_FILES:
             sys.exit(
                 f"Unknown project: {project}\n"
-                "Available Tests4Py projects:\n" +
-                "\n".join(sorted(TEST_FILES.keys()))
-            )  
-            
-# Purpose: Update builds column with either true (pass) or false (fails), and update 
+                "Available Tests4Py projects:\n" + "\n".join(sorted(TEST_FILES.keys()))
+            )
+
+# Purpose: Update builds column with either true (pass) or false (fails), and update
 #          discard_reason column with 1 if build failed.
 # Parameters: df (DataFrame), program_name (program), result (return value from subprocess)
 # Return: none
@@ -55,23 +55,24 @@ def record_result(df, program_name, result):
     else:
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print("BUILD SUCCESS ...")
-    
-            
+
 # Apply Meta's TestGen-LLM's first filter, which is to check for build correctness.
 def main():
-    parser = argparse.ArgumentParser(description = "check if an LLM-generated test class is built correctly.")
-    
+    parser = argparse.ArgumentParser(
+        description="check if an LLM-generated test class is built correctly."
+    )
+
     parser.add_argument(
         "-p", "--project",
-        help="apply build filter to a single project."
+        help="apply build filter to a single project.",
     )
-    
+
     parser.add_argument(
         "-f", "--file",
         default="results.csv",
-        help="CSV filename in results directory that records the data."
+        help="CSV filename in results directory that records the data.",
     )
-    
+
     # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
@@ -80,17 +81,21 @@ def main():
     tmp_dir = scripts_dir / "tmp"
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
-    
+
     # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
     df = pd.read_csv(results_csv)
     df_usable = df[(df["usable"] == True) & df["builds"].isna()]
-    
+
     # Select a single project only
     if args.project:
-        df_usable = df_usable[df_usable["program_name"].str.startswith(args.project + "_")]
-    
+        df_usable = df_usable[
+            df_usable["program_name"].str.startswith(args.project + "_")
+        ]
+
     print(f"CSV FILE: {args.file}")
-    
+
+    installed_projects = set()
+
     for index, row in df_usable.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
@@ -101,37 +106,52 @@ def main():
         original_test_file = project_dir / TEST_FILES[project]
         llm_test_path = original_test_file.with_name(str(llm_test_file))
         python = sys.executable
-        
+
         print("INSTALLING PACKAGES ...")
-        # Skip pip install if needed (edit the string)
-        if project == "tqdm":
+        if project not in installed_projects:
+            result3 = subprocess.run(
+                [python, "-m", "pip", "install", "-e", "."],
+                cwd=str(project_dir),
+            )
+            installed_projects.add(project)
+        else:
+            print("Packages already installed for this project, skipping.")
             result3 = subprocess.CompletedProcess(args=[], returncode=0)
 
-        else:
-            result3 = subprocess.run(
-            # str(pip)
-                [python, "-m", "pip", "install", "-e", "."],
-                cwd=str(project_dir)
-            )
-            
         if result3.returncode != 0:
             print("ERROR: PIP INSTALL FAILED ...")
             record_result(df, program_name, result3)
             df.to_csv(results_csv, index=False)
             continue
-                    
+
         print(f"[{program_name}] BUILD FILTER (pytest --collect-only): {llm_test_file}")
 
-        # Run pytest --collect-only to replicate build filter 
+        # Run pytest --collect-only to replicate build filter
         result = subprocess.run(
             [python, "-m", "pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
-            cwd=str(project_dir)
+            cwd=str(project_dir),
+            capture_output=True,
+            text=True,
         )
+
+        # Auto-install missing package once, then retry pytest
+        if result.returncode != 0 and "No module named" in result.stderr:
+            pkg = result.stderr.split("No module named", 1)[1].splitlines()[0].strip().strip("'\"")
+            print(f"Installing missing package: {pkg}")
+            subprocess.run(
+                [python, "-m", "pip", "install", pkg],
+                cwd=str(project_dir),
+            )
+
+            print("Retrying pytest...")
+            result = subprocess.run(
+                [python, "-m", "pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
+                cwd=str(project_dir),
+            )
 
         # Record result to csv file
         record_result(df, program_name, result)
-    
         df.to_csv(results_csv, index=False)
-    
+
 if __name__ == "__main__":
     main()
