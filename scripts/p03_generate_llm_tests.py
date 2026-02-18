@@ -6,26 +6,26 @@ import ollama
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", #
-    "black": "tests/test_black.py", #
-    "calculator": "tests/test_calc.py", #
-    "cookiecutter": "tests/test_generate_file.py", #
-    "expression": "tests/test_expression.py", #
-    "fastapi": "tests/test_jsonable_encoder.py", #
-    "httpie": "tests/test_exit_status.py", #
-    "keras": "tests/test_loss_masking.py", #
-    "luigi": "test/factorial_test.py", #
+    "ansible": "test/units/errors/test_errors.py", 
+    "black": "tests/test_black.py", 
+    "calculator": "tests/test_calc.py", 
+    "cookiecutter": "tests/test_generate_file.py", 
+    "expression": "tests/test_expression.py", 
+    "fastapi": "tests/test_jsonable_encoder.py", 
+    "httpie": "tests/test_exit_status.py", 
+    "keras": "tests/test_loss_masking.py", 
+    "luigi": "test/factorial_test.py", 
     "markup": "tests/test_markup.py", 
-    "matplotlib": "lib/matplotlib/tests/test_container.py", #
-    "middle": "tests/test_middle.py", #
+    "matplotlib": "lib/matplotlib/tests/test_container.py", 
+    "middle": "tests/test_middle.py", 
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
-    "pysnooper": "tests/test_pysnooper.py", #
-    "sanic": "tests/test_middleware.py", #
-    "scrapy": "tests/test_command_fetch.py", #
+    "pysnooper": "tests/test_pysnooper.py", 
+    "sanic": "tests/test_middleware.py", 
+    "scrapy": "tests/test_command_fetch.py", 
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
-    "thefuck": "tests/test_logs.py", #
+    "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
-    "tqdm": "tqdm/tests/tests_tqdm.py",
+    "tqdm": "tqdm/tests/tests_tqdm.py", 
     "youtubedl": "test/test_age_restriction.py"
 }
 
@@ -50,7 +50,7 @@ CUT_FILES = {
     "spacy": "spacy/util.py", 
     "thefuck": "thefuck/logs.py", 
     "tornado": "tornado/escape.py", 
-    "tqdm": "tqdm/std.py",
+    "tqdm": "tqdm/_tqdm.py", # tqdm_1 and tqdm_2 = use tqdm/std.py instead
     "youtubedl": "youtube_dl/YoutubeDL.py"
 }
 
