@@ -1,6 +1,6 @@
 # Automated-Test-Generation-Using-LLM
 
-This repository contains scripts for a replication study of [Meta’s TestGen-LLM method](https://arxiv.org/abs/2402.09171), using Python and pytest. Its purpose is to evaluate whether applying Meta's TestGen-LLM method on the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) results in similar overall and filter success rates on the Tests4Py benchmark to those reported in Meta's study.
+This repository contains scripts for a replication study of [Meta’s TestGen-LLM](https://arxiv.org/abs/2402.09171), using Python and pytest. Its purpose is to evaluate whether applying Meta's TestGen-LLM method on the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) results in similar overall and filter success rates on the Tests4Py benchmark to those reported in Meta's study.
 
 ## Installation
 
@@ -11,16 +11,17 @@ Install them using:
 pip install -r requirements.txt
 ```
 
+### Ollama
+
+This project uses [Ollama](https://ollama.com/) to run large language models locally for automated test generation. Install the model(s):
+- [llama3.2:3b](https://ollama.com/library/llama3.2:3b)
+
+## Running 
 To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) CLI (`t4p`) and run this project, activate the virtual environment using:
 
 ```bash
 .venv\Scripts\activate
 ```
-
-### Ollama
-
-This project uses [Ollama](https://ollama.com/) to run large language models locally for automated test generation. Install the model(s):
-- [llama3.2:3b](https://ollama.com/library/llama3.2:3b)
 
 ## Scripts
 
@@ -108,7 +109,7 @@ options:
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-- p08_analysis.py
+p08_analysis.py
 
 ## License 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
