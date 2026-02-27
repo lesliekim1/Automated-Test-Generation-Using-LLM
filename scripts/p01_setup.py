@@ -27,9 +27,7 @@ PROJECTS = {
     "youtubedl": 43,
 }
 
-# Purpose: Get all selected projects to be retrieved.
-# Parameters: project (project from argument)
-# Return: dict of projects
+# Get all selected projects to be retrieved
 def select_projects(project):
     # Single project
     if project:
@@ -42,10 +40,7 @@ def select_projects(project):
         chosen_projects = PROJECTS
     return chosen_projects
 
-# Purpose: Retrieve all chosen project(s) by using t4p checkout.
-# Parameters: chosen_projects (projects to be retrieved), t4p (t4p executable), 
-#             tmp_dir (tmp folder), scripts_dir (scripts folder)
-# Return: none
+# Retrieve all chosen project(s) by using t4p checkout
 def t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir):
     for project, num_bugs in chosen_projects.items():
         for bug_id in range(1, num_bugs+1):
@@ -69,14 +64,9 @@ def main():
     scripts_dir = Path(__file__).absolute().parent
     t4p = scripts_dir.parent /".venv" / "Scripts" / "t4p.exe"
 
-    # Create tmp dir to store Tests4Py projects
+    # Create tmp dir in scripts dir to store Tests4Py projects
     tmp_dir = scripts_dir / "tmp"
     tmp_dir.mkdir(exist_ok=True)
      
     chosen_projects = select_projects(args.project)
-    
-    # t4p checkout all chosen project(s)
     t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir)
-
-if __name__ == "__main__":
-    main()

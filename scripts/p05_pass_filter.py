@@ -29,9 +29,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# Purpose: Check if project input is valid.
-# Parameters: project (project from argument)
-# Return: end program if invalid
+# Check if project input is valid
 def validate_project(project):
     if project:
         if project not in TEST_FILES:
@@ -41,10 +39,8 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
           
-# Purpose: Update pass column with either true (pass) or false (fails), and update 
-#          discard_reason column with 2 if pass failed.
-# Parameters: df (DataFrame), program_name (program), passes_bool (return value from subprocess 5x)
-# Return: none  
+# Update pass column with either true (pass) or false (fails), and update 
+# discard_reason column with 2 if pass failed
 def record_result(df, program_name, passes_bool):
     df.loc[df["program_name"] == program_name, "passes"] = passes_bool
         
@@ -55,7 +51,7 @@ def record_result(df, program_name, passes_bool):
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print("SUCCESS: PASSED 5 TIMES ...")
             
-# Apply Meta's TestGen-LLM's second filter, which is to check for flaky behavior in five executions.
+# Apply Meta's TestGen-LLM's second filter, which is to check for flaky behavior in five executions
 def main():
     parser = argparse.ArgumentParser(description = "check for any flaky behavior by executing the LLM-generated test five times.")
     
@@ -70,7 +66,6 @@ def main():
         help="CSV filename in results directory that records the data."
     )
     
-    # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
     
@@ -84,7 +79,6 @@ def main():
     df = pd.read_csv(results_csv)
     df_pass = df[(df["usable"] == True) & (df["builds"] == True) & df["passes"].isna()]
     
-    # Select a single project only
     if args.project:
         df_pass = df_pass[df_pass["program_name"].str.startswith(args.project + "_")]
     
@@ -123,6 +117,3 @@ def main():
         record_result(df, program_name, passes_bool)
         
     df.to_csv(results_csv, index=False)
-    
-if __name__ == "__main__":
-    main()

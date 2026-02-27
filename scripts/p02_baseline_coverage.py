@@ -53,9 +53,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# Purpose: Create CSV file if it doesn't exist, or read results.csv.
-# Parameters: file_path (path to results/results.csv)
-# Return: results.csv
+# Create CSV file if it doesn't exist, or read results.csv
 def read_csv(file_path):
     if not file_path.exists():
         df = pd.DataFrame(columns=[
@@ -75,24 +73,18 @@ def read_csv(file_path):
         df.to_csv(file_path, index=False)
     return pd.read_csv(file_path)
 
-# Purpose: Get all selected projects to be retrieved.
-# Parameters: project (project from argument)
-# Return: dict of projects
+# Get all selected projects to be retrieved (one or all)
 def select_projects(project):
-    # Use one project
     if project:
         if project not in PROJECTS:
             sys.exit(f"Unknown project: {project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         chosen_projects = {project: PROJECTS[project]} 
         
-    # Use all projects
     else:
         chosen_projects = PROJECTS
     return chosen_projects
 
-# Purpose: Parse the coverage report output to get the coverage number only.
-# Parameters: result2 (process' object that captured coverage report output)
-# Return: a number
+# Parse the coverage report output to get the coverage number only
 def get_coverage_number(result2):
     for line in result2.stdout.splitlines():
         line = line.strip()
@@ -101,7 +93,7 @@ def get_coverage_number(result2):
         if line.startswith("TOTAL"):
             return line.split()[-1].replace("%", "")
 
-# Run a test file with pytest from Tests4Py project(s) to record statement coverage.
+# Run a test file with pytest from Tests4Py project(s) to record statement coverage
 def main():
     parser = argparse.ArgumentParser(description = "get statement coverage of a test class from " \
     "each Tests4Py project.")
@@ -114,20 +106,17 @@ def main():
     args = parser.parse_args()
     scripts_dir = Path(__file__).absolute().parent
     tmp_dir = scripts_dir / "tmp"
-    #pytest = scripts_dir.parent /".venv" / "Scripts" / "pytest.exe" #hard coded for windows
-    #pip = scripts_dir.parent /".venv" / "Scripts" / "pip.exe" #hard coded for windows
-    python = sys.executable # for WSL terminal
+    python = sys.executable
 
     # Create results dir in scripts dir to store CSV file
     results_dir = scripts_dir.parent / "results"
     results_dir.mkdir(exist_ok=True)
 
-    # Read results.csv and get selected projects
     file_path = results_dir / "results.csv" 
     df = read_csv(file_path)
     chosen_projects = select_projects(args.project)
     
-    # Run pytest --cov on all chosen projects to get and record coverage to results.csv
+    # Run pytest --cov on all chosen projects to record coverage to results.csv
     for project, num_bugs in chosen_projects.items():
         for bug_id in range(1, num_bugs + 1):
             program_name = f"{project}_{bug_id}"
@@ -137,7 +126,7 @@ def main():
             print(f"CHECKING IF {project}_{bug_id} IS USABLE ... ")
 
             if bug_id == 1:
-                # Skip pip install if needed (edit the string)
+                # Skip pip install if needed for faster run (edit the string)
                 if project == "tqdm":
                     result = subprocess.CompletedProcess(args=[], returncode=0)
 
@@ -148,14 +137,11 @@ def main():
                         cwd=str(project_dir)
                     )
 
-            # If environment is compatible after installing project's packages
             if result.returncode == 0:
                 print("SUCCESS: ENVIRONMENT COMPATIBLE! ATTEMPTING TO GET COVERAGE ...")
                 test_file = project_dir / TEST_FILES[project]
                 
-                # Attempt to run pytest --cov to get statement coverage and record it 
                 result2 = subprocess.run(
-                    # str(pytest)
                     [python, "-m", "pytest", str(test_file), "--cov", "--cov-report=term"],
                     cwd=str(project_dir),
                     stdout=subprocess.PIPE,
@@ -220,6 +206,3 @@ def main():
                 }
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     df.to_csv(file_path, index=False)
-
-if __name__ == "__main__":
-    main()

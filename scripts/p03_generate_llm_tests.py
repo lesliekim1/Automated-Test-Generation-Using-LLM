@@ -31,7 +31,7 @@ TEST_FILES = {
 
 # A chosen "class under test" (CUT) file to give the LLM an example reference
 CUT_FILES = {
-    "ansible": "lib/ansible/errors/__init__.py", # ansible_1 has build/lib/..
+    "ansible": "lib/ansible/errors/__init__.py",
     "black": "black.py", 
     "calculator": "src/calc/__init__.py", 
     "cookiecutter": "cookiecutter/generate.py", 
@@ -50,18 +50,15 @@ CUT_FILES = {
     "spacy": "spacy/util.py", 
     "thefuck": "thefuck/logs.py", 
     "tornado": "tornado/escape.py", 
-    "tqdm": "tqdm/_tqdm.py", # tqdm_1 and tqdm_2 = use tqdm/std.py instead
+    "tqdm": "tqdm/_tqdm.py",
     "youtubedl": "youtube_dl/YoutubeDL.py"
 }
 
-# LLMs option(s)
 LLMS = {
     "llama": "llama3.2:3b"
 }
 
-# Purpose: Check if project input is valid.
-# Parameters: project (project from argument)
-# Return: end program if invalid
+# Check if project input is valid
 def validate_project(project):
     if project:
         if project not in TEST_FILES:
@@ -71,9 +68,7 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             )  
 
-# Purpose: Check if LLM model is valid.
-# Parameters: model (model from argument)
-# Return: end program if invalid
+# Check if LLM model is valid
 def validate_model(model):
     if model not in LLMS:
         sys.exit(
@@ -99,7 +94,7 @@ def main():
     parser.add_argument(
         "-n", "--number",
         default="1",
-        help="1 = extend_test, 2 = extend_coverage, 3 = corner_cases, 4 = statement_to_complete"
+        help="prompts: 1 = extend_test, 2 = extend_coverage, 3 = corner_cases, 4 = statement_to_complete"
     )
     
     parser.add_argument(
@@ -108,7 +103,6 @@ def main():
         help="CSV filename in results directory that records the data."
     )
     
-    # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
     validate_model(args.model)
@@ -131,16 +125,20 @@ def main():
     
     print(f"MODEL: {LLMS[args.model]}")
     
-    # Prompts are directly from Meta's paper (pg 7)
+    # Prompts are directly from Meta's paper (see Table 2 in pg 7)
     prompt_mode = str(args.number)
     if prompt_mode == "1":
-        mode = "TESTONLY" # equivalent to extend_test 
+        mode = "TESTONLY" # equivalent to extend_test prompt
+        
     elif prompt_mode == "2":
-        mode = "TESTCUT" # equivalent to extend_coverage
+        mode = "TESTCUT" # equivalent to extend_coverage prompt
+        
     elif prompt_mode == "3":
         mode = "CORNERCASES"
+        
     elif prompt_mode == "4":
         mode = "STATEMENTCOMPLETE"
+        
     else:
         sys.exit("Invalid -n. Use 1, 2, 3, or 4.")
         
@@ -154,32 +152,36 @@ def main():
         
         project_dir = tmp_dir / program_name
         original_test_file = project_dir / TEST_FILES[project]
-        existing_test_class = original_test_file.read_text(encoding="utf-8")
+        
+        # Skip if test file can't be found so that program doesn't crash
+        try:
+            existing_test_class = original_test_file.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            print(f"**ERROR: Missing test file for {program_name}, skipping ...\n")
+            continue
         
         # Test only mode (extend_test prompt)
         if (prompt_mode == "1"):
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
-            # Prompt is the same as from Meta's study (output format is instructions for LLM)
             prompt = f"""
             Here is a Python unit test class:
 
             {existing_test_class}
 
             Write an extended version of the test class that includes additional tests to cover some extra corner cases.
-
-            OUTPUT FORMAT (required):
-            - OUTPUT ONLY PYTHON CODE.
-            - Do NOT include explanations or comments outside the code.
-            - Do NOT wrap the code in backticks (```).
-            - Retain required imports from the original test class so the tests can run.
-            - Preserve the structure of the original test class and extend it.
             """
     
         # Test and class under test mode (extend_coverage prompt)
         elif (prompt_mode == "2"):
             class_under_test_file = project_dir / CUT_FILES[project]
-            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            
+            try:
+                class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                print(f"**ERROR: Missing CUT file for {program_name}, skipping...")
+                continue
+
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
             # Prompt is the same as from Meta's study (output format is instructions for LLM)
@@ -196,16 +198,28 @@ def main():
             - OUTPUT ONLY PYTHON CODE.
             - Do NOT include explanations or comments outside the code.
             - Do NOT wrap the code in backticks (```).
-            - Retain required imports from the original test class so the tests can run.
-            - Preserve the structure of the original test class and extend it.
+            - The test file must be runnable with pytest.
+            - Do not add if __name__ == "__main__" blocks.
+            - Use pytest-style assertions and fixtures if appropriate.
+            - Use ONLY classes, functions, and objects that already exist in the provided source or test file.
+            - DO NOT create new classes, functions, or exceptions.
+            - If a referenced symbol does not exist, do not invent it.
+            - Use only exceptions that already exist in the codebase or Python standard library. 
+            - Preserve ALL existing tests and structure; only append new tests.
             """
-            
+        
+        # corner_cases prompt    
         elif (prompt_mode == "3"):
             class_under_test_file = project_dir / CUT_FILES[project]
-            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+
+            try:
+                class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                print(f"**ERROR: Missing CUT file for {program_name}, skipping...")
+                continue
+            
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
-            # Prompt is the same as from Meta's study (output format is instructions for LLM)
             prompt = f"""
             Here is a Python unit test class and the class that it tests:
 
@@ -214,21 +228,20 @@ def main():
             {class_under_test}
 
             Write an extended version of the test class that includes additional unit tests that will cover corner cases missed by the original and will increase the test coverage of the class under test.
-
-            OUTPUT FORMAT (required):
-            - OUTPUT ONLY PYTHON CODE.
-            - Do NOT include explanations or comments outside the code.
-            - Do NOT wrap the code in backticks (```).
-            - Retain required imports from the original test class so the tests can run.
-            - Preserve the structure of the original test class and extend it.
             """
-            
+    
+        # statement_complete prompt
         else:
             class_under_test_file = project_dir / CUT_FILES[project]
-            class_under_test = class_under_test_file.read_text(encoding="utf-8")
+
+            try:
+                class_under_test = class_under_test_file.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                print(f"**ERROR: Missing CUT file for {program_name}, skipping...")
+                continue
+            
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
-            # Prompt is the same as from Meta's study (output format is instructions for LLM)
             prompt = f"""
             Here is a Python class under test
             
@@ -239,13 +252,6 @@ def main():
             {existing_test_class}
 
             Here is an extended version of the unit test class that includes additional unit test cases that will cover methods, edge cases, corner cases, and other features of the class under test that were missed by the original unit test class:            
-            
-            OUTPUT FORMAT (required):
-            - OUTPUT ONLY PYTHON CODE.
-            - Do NOT include explanations or comments outside the code.
-            - Do NOT wrap the code in backticks (```).
-            - Retain required imports from the original test class so the tests can run.
-            - Preserve the structure of the original test class and extend it.
             """
         
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
@@ -267,12 +273,9 @@ def main():
             print(f"**ERROR: FAILED TO GENERATE FOR {program_name}: {e} ...\n")
             continue
             
-        # Output to file in same path as the original test class
+        # Output to file in same dir path as the original test class
         with open(output_file, "w", encoding="utf-8") as py_file:
             py_file.write(llm_response)
             
         df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name  
         df.to_csv(results_csv, index=False)
-    
-if __name__ == "__main__":
-    main()

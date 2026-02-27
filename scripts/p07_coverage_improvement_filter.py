@@ -5,7 +5,7 @@ import pandas as pd
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", #
+    "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
@@ -28,9 +28,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# Purpose: Check if project input is valid.
-# Parameters: project (project from argument)
-# Return: end program if invalid
+# Check if project input is valid
 def validate_project(project):
     if project:
         if project not in TEST_FILES:
@@ -40,11 +38,8 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
 
-# Purpose: Update kept column with either true (pass) or false (fails), and update 
-#          discard_reason column with 3 if kept failed.
-# Parameters: df (DataFrame), program_name (program), kept_bool (boolean value)
-#             coverage_delta (difference between original test coverage and LLM test coverage)
-# Return: none  
+# Update kept column with either true (pass) or false (fails), and update 
+# discard_reason column with 3 if kept failed
 def record_result(df, program_name, kept_bool, coverage_delta):
     if not kept_bool:
         df.loc[df["program_name"] == program_name, "discard_reason"] = 3
@@ -54,7 +49,7 @@ def record_result(df, program_name, kept_bool, coverage_delta):
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print(f"IMPROVEMENT SUCCESS: {program_name} ...")
     
-# Apply Meta's TestGen-LLM's third filter, which is to check for coverage improvement.
+# Apply Meta's TestGen-LLM's third filter, which is to check for coverage improvement
 def main():
     parser = argparse.ArgumentParser(description = "check for if coverage improvement has occurred on LLM-generated tests.")
     
@@ -88,7 +83,6 @@ def main():
     for index, row in df_cov.iterrows():
         program_name = row["program_name"]
         
-        # Calculate coverage_delta and record it
         coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
         df.loc[df["program_name"] == program_name, "coverage_delta"] = coverage_delta
 
@@ -98,6 +92,3 @@ def main():
         
         record_result(df, program_name, kept_bool, coverage_delta)
         df.to_csv(results_csv, index=False)
-
-if __name__ == "__main__":
-    main()

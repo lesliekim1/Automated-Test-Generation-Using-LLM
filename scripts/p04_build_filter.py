@@ -29,9 +29,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py",
 }
 
-# Purpose: Check if project input is valid.
-# Parameters: project (project from argument)
-# Return: end program if invalid
+# Check if project input is valid
 def validate_project(project):
     if project:
         if project not in TEST_FILES:
@@ -40,12 +38,9 @@ def validate_project(project):
                 "Available Tests4Py projects:\n" + "\n".join(sorted(TEST_FILES.keys()))
             )
 
-# Purpose: Update builds column with either true (pass) or false (fails), and update
-#          discard_reason column with 1 if build failed.
-# Parameters: df (DataFrame), program_name (program), result (return value from subprocess)
-# Return: none
+# Update builds column with either true (pass) or false (fails), and update discard_reason column 
+# with 1 if build failed
 def record_result(df, program_name, result):
-    # Boolean value to be recorded
     builds_bool = (result.returncode == 0)
     df.loc[df["program_name"] == program_name, "builds"] = builds_bool
 
@@ -73,7 +68,6 @@ def main():
         help="CSV filename in results directory that records the data.",
     )
 
-    # Check valid argument(s)
     args = parser.parse_args()
     validate_project(args.project)
 
@@ -86,7 +80,6 @@ def main():
     df = pd.read_csv(results_csv)
     df_usable = df[(df["usable"] == True) & df["builds"].isna()]
 
-    # Select a single project only
     if args.project:
         df_usable = df_usable[
             df_usable["program_name"].str.startswith(args.project + "_")
@@ -120,6 +113,7 @@ def main():
 
         if result3.returncode != 0:
             print("ERROR: PIP INSTALL FAILED ...")
+            print(result3.stderr)
             record_result(df, program_name, result3)
             df.to_csv(results_csv, index=False)
             continue
@@ -149,9 +143,5 @@ def main():
                 cwd=str(project_dir),
             )
 
-        # Record result to csv file
         record_result(df, program_name, result)
         df.to_csv(results_csv, index=False)
-
-if __name__ == "__main__":
-    main()

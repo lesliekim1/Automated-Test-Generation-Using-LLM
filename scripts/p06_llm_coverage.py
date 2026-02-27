@@ -29,9 +29,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# Purpose: Check if project input is valid.
-# Parameters: project (project from argument)
-# Return: end program if invalid
+# Check if project input is valid
 def validate_project(project):
     if project:
         if project not in TEST_FILES:
@@ -41,9 +39,7 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
             
-# Purpose: Parse the coverage report output to get the coverage number only.
-# Parameters: result2 (process' object that captured coverage report output)
-# Return: a number
+# Parse the coverage report output to get the coverage number only
 def get_coverage_number(result2):
     for line in result2.stdout.splitlines():
         line = line.strip()
@@ -52,7 +48,7 @@ def get_coverage_number(result2):
         if line.startswith("TOTAL"):
             return line.split()[-1].replace("%", "")
 
-# Run a LLM-generated test file with pytest from Tests4Py project(s) to record statement coverage.
+# Run a LLM-generated test file with pytest from Tests4Py project(s) to record statement coverage
 def main():
     parser = argparse.ArgumentParser(description = "get statement coverage of a LLM-generated test class from " \
     "each Tests4Py project.")
@@ -82,13 +78,11 @@ def main():
     df = pd.read_csv(results_csv)
     df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True) & df["kept"].isna()]
     
-    # Select a single project only
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
         
     print(f"CSV FILE: {args.file}")
     
-    # Run pytest --cov on all chosen projects to get and record coverage to results.csv
     for index, row in df_cov.iterrows():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
@@ -103,7 +97,7 @@ def main():
         
         # Run pytest --cov on the LLM-generated test file only
         result2 = subprocess.run(
-            [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
+            [python, "-m", "pytest", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
             cwd=str(project_dir),
             stdout=subprocess.PIPE,
             text=True
@@ -123,6 +117,3 @@ def main():
             print("SUCCESS: COVERAGE COLLECTED ...")
             
         df.to_csv(results_csv, index=False)
-            
-if __name__ == "__main__":
-    main()
