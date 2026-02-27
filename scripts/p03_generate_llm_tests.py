@@ -193,19 +193,6 @@ def main():
             {class_under_test}
 
             Write an extended version of the test class that includes additional unit tests that will increase the test coverage of the class under test.
-
-            OUTPUT FORMAT (required):
-            - OUTPUT ONLY PYTHON CODE.
-            - Do NOT include explanations or comments outside the code.
-            - Do NOT wrap the code in backticks (```).
-            - The test file must be runnable with pytest.
-            - Do not add if __name__ == "__main__" blocks.
-            - Use pytest-style assertions and fixtures if appropriate.
-            - Use ONLY classes, functions, and objects that already exist in the provided source or test file.
-            - DO NOT create new classes, functions, or exceptions.
-            - If a referenced symbol does not exist, do not invent it.
-            - Use only exceptions that already exist in the codebase or Python standard library. 
-            - Preserve ALL existing tests and structure; only append new tests.
             """
         
         # corner_cases prompt    
