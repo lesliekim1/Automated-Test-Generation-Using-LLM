@@ -5,33 +5,31 @@ import pandas as pd
 import subprocess
 
 # TODO 
-# 1. httpie & markup & tqdm
-# 2. pysnooper & sanic
-# 3. tornado
-# 4. ansible
-# 5. fastapi
-# 6. black
-# 7. matplotlib
-# 8. thefuck
-# 9. luigi
-# 10. scrapy
-# 11. youtubedl
-# 12. keras
+# 1. tqdm & sanic
+# 2. tornado 
+# 3. ansible ----------
+# 4. black 
+# 5. matplotlib
+# 6. thefuck 
+# 7. luigi
+# 8. scrapy
+# 9. youtubedl 
+# 10. keras
 TEST_FILES = {
     "ansible": "test/units/errors/test_errors.py", # 18 
     "black": "tests/test_black.py", #23 
-    "calculator": "tests/test_calc.py", #TODO
-    "cookiecutter": "tests/test_generate_file.py", #TODO
-    "expression": "tests/test_expression.py", #TODO
-    "fastapi": "tests/test_jsonable_encoder.py", #16 
-    "httpie": "tests/test_exit_status.py", #5 
+    "calculator": "tests/test_calc.py", #
+    "cookiecutter": "tests/test_generate_file.py", #
+    "expression": "tests/test_expression.py", #
+    "fastapi": "tests/test_jsonable_encoder.py", #
+    "httpie": "tests/test_exit_status.py", #
     "keras": "tests/test_loss_masking.py", #45 
     "luigi": "test/factorial_test.py", #33 
-    "markup": "tests/test_markup.py", #2 
+    "markup": "tests/test_markup.py", #
     "matplotlib": "lib/matplotlib/tests/test_container.py", #30 
-    "middle": "tests/test_middle.py", #TODO
+    "middle": "tests/test_middle.py", #
     "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
-    "pysnooper": "tests/test_pysnooper.py", #3 
+    "pysnooper": "tests/test_pysnooper.py", #
     "sanic": "tests/test_middleware.py", #5 
     "scrapy": "tests/test_command_fetch.py", #40 
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
@@ -122,7 +120,7 @@ def main():
             
         else:
             result3 = subprocess.run(
-                [python, "-m", "pip", "install", "-e", "."],
+                ["pip", "install", "-e", "."],
                 cwd=str(project_dir),
                 capture_output=True,
                 text=True,
@@ -142,7 +140,7 @@ def main():
 
         # Run pytest --collect-only to replicate build filter
         result = subprocess.run(
-            [python, "-m", "pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
+            ["pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
             cwd=str(project_dir),
             capture_output=True,
             text=True,

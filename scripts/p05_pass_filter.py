@@ -49,7 +49,7 @@ def record_result(df, program_name, passes_bool):
         print("FAILED: FLAKY DETECTED ...")
     else:
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
-        print("SUCCESS: PASSED 5 TIMES ...")
+        print("SUCCESS: NO FLAKY DETECTED ...")
             
 # Apply Meta's TestGen-LLM's second filter, which is to check for flaky behavior in five executions
 def main():
@@ -97,15 +97,32 @@ def main():
         print(f"[{program_name}] PASS FILTER: {llm_test_file}")
         
         # Run the pass filter 5 times to catch any flaky behavior
-        result = subprocess.run(
-            [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir)), "--count=5"], 
-            cwd=str(project_dir),
-        )       
-            
-        # If run is inconsistent (passing sometimes and failing sometimes), then it's flaky
-        passes_bool = (result.returncode == 0)
+        codes = []
+        passes_bool = True
+
+        for i in range(5):
+            print(f"RUN #{i+1} ...")
+            try:
+                result = subprocess.run(
+                    [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
+                    cwd=str(project_dir),
+                    stdout=subprocess.PIPE,
+                    text=True,
+                    timeout=120
+                )
+                codes.append(result.returncode)
+
+            # To avoid slow pytest running, such as possible infinite loops
+            except subprocess.TimeoutExpired:
+                print("**ERROR: timeout, marking as failure ...")
+                passes_bool = False
+                break 
+
+        if passes_bool:
+            passes_bool = (len(set(codes)) == 1)
+
         record_result(df, program_name, passes_bool)
-        
+
     df.to_csv(results_csv, index=False)
 
 if __name__ == "__main__":

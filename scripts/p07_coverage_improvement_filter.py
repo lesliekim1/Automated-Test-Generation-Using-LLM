@@ -73,7 +73,7 @@ def main():
     
     # Read results.csv and iterate through any projects that have passed the build and pass filters
     df = pd.read_csv(results_csv)
-    df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True) & (df["coverage_after"].notna()) & (df["kept"].isna())]
+    df_cov = df[(df["usable"] == True) & (df["builds"] == True) & (df["passes"] == True) & (df["kept"].isna())]
     
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]

@@ -97,7 +97,7 @@ def main():
         
         # Run pytest --cov on the LLM-generated test file only
         result2 = subprocess.run(
-            [python, "-m", "pytest", "-q", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), f"--cov={project}", "--cov-report=term"],
+            [python, "-m", "pytest", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
             cwd=str(project_dir),
             stdout=subprocess.PIPE,
             text=True

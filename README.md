@@ -20,7 +20,14 @@ This project uses [Ollama](https://ollama.com/) to run large language models loc
 To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) CLI (`t4p`) and run this project, activate the virtual environment using:
 
 ```bash
-.venv\Scripts\activate
+source .venv/Scripts/activate
+```
+
+To run all filters for a project (e.g. ./run_filters.sh calculator ansible):
+
+```bash
+cd scripts
+./run_filters.sh <project1> <project2> <project3> ...
 ```
 
 ## Scripts
