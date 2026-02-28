@@ -6,7 +6,7 @@ import subprocess
 
 # A chosen test file from each Tests4Py project 
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py", #
+    "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
@@ -97,23 +97,16 @@ def main():
         print(f"[{program_name}] PASS FILTER: {llm_test_file}")
         
         # Run the pass filter 5 times to catch any flaky behavior
-        codes = []
-        passes_bool = True
-        for i in range(5):
-            result = subprocess.run(
-                [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
-                cwd=str(project_dir),
-                stdout=subprocess.PIPE,
-                text=True
-            )
-            
-            print(f"RUN #{i+1} ...")
-            print(result.stdout)
-            codes.append(result.returncode)
+        result = subprocess.run(
+            [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir)), "--count=5"], 
+            cwd=str(project_dir),
+        )       
             
         # If run is inconsistent (passing sometimes and failing sometimes), then it's flaky
-        passes_bool = (len(set(codes)) == 1)
-        
+        passes_bool = (result.returncode == 0)
         record_result(df, program_name, passes_bool)
         
     df.to_csv(results_csv, index=False)
+
+if __name__ == "__main__":
+    main()

@@ -6,3 +6,4 @@ pytest-twisted
 ollama
 pytest-xdist
 twisted
+pytest-repeats

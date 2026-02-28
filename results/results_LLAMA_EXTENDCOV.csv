@@ -40,7 +40,7 @@ black_20,test_black.py,True,test_black_LLAMA_TESTCUT.py,False,,33.0,,,,1.0,TESTC
 black_21,test_black.py,True,test_black_LLAMA_TESTCUT.py,False,,32.0,,,,1.0,TESTCUT
 black_22,test_black.py,True,test_black_LLAMA_TESTCUT.py,False,,31.0,,,,1.0,TESTCUT
 black_23,test_black.py,True,test_black_LLAMA_TESTCUT.py,False,,29.0,,,,1.0,TESTCUT
-calculator_1,test_calc.py,True,test_calc_LLAMA_TESTCUT.py,,,100.0,,,,,TESTCUT
+calculator_1,test_calc.py,True,test_calc_LLAMA_TESTCUT.py,True,,100.0,,,,,TESTCUT
 cookiecutter_1,test_generate_file.py,True,test_generate_file_LLAMA_TESTCUT.py,,,44.0,,,,,TESTCUT
 cookiecutter_2,test_generate_file.py,True,test_generate_file_LLAMA_TESTCUT.py,,,45.0,,,,,TESTCUT
 cookiecutter_3,test_generate_file.py,True,test_generate_file_LLAMA_TESTCUT.py,,,41.0,,,,,TESTCUT

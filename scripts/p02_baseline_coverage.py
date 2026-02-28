@@ -206,3 +206,6 @@ def main():
                 }
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     df.to_csv(file_path, index=False)
+
+if __name__ == "__main__":
+    main()

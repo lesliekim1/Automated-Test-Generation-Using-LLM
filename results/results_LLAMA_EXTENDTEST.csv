@@ -40,7 +40,7 @@ black_20,test_black.py,True,test_black_LLAMA_TESTONLY.py,False,,33.0,,,,1.0,TEST
 black_21,test_black.py,True,test_black_LLAMA_TESTONLY.py,False,,32.0,,,,1.0,TESTONLY
 black_22,test_black.py,True,test_black_LLAMA_TESTONLY.py,True,,31.0,,,,,TESTONLY
 black_23,test_black.py,True,test_black_LLAMA_TESTONLY.py,False,,29.0,,,,1.0,TESTONLY
-calculator_1,test_calc.py,True,test_calc_LLAMA_TESTONLY.py,,,100.0,,,,,TESTONLY
+calculator_1,test_calc.py,True,test_calc_LLAMA_TESTONLY.py,True,,100.0,,,,,TESTONLY
 cookiecutter_1,test_generate_file.py,True,test_generate_file_LLAMA_TESTONLY.py,,,44.0,,,,,TESTONLY
 cookiecutter_2,test_generate_file.py,True,test_generate_file_LLAMA_TESTONLY.py,,,45.0,,,,,TESTONLY
 cookiecutter_3,test_generate_file.py,True,test_generate_file_LLAMA_TESTONLY.py,,,41.0,,,,,TESTONLY

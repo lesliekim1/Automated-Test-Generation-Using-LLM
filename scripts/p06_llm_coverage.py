@@ -97,15 +97,16 @@ def main():
         
         # Run pytest --cov on the LLM-generated test file only
         result2 = subprocess.run(
-            [python, "-m", "pytest", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
+            [python, "-m", "pytest", "-q", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), f"--cov={project}", "--cov-report=term"],
             cwd=str(project_dir),
             stdout=subprocess.PIPE,
             text=True
         )
         
-        print("PRINTING STATEMENT COVERAGE ...")
-        print(result2.stdout)
         coverage_after = get_coverage_number(result2)
+        print("PRINTING STATEMENT COVERAGE ...")
+        if coverage_after is None:
+            print(result2.stdout)
         
         # If pytest or other errors has occurred, then program failed the third filter
         if coverage_after is None:
@@ -117,3 +118,6 @@ def main():
             print("SUCCESS: COVERAGE COLLECTED ...")
             
         df.to_csv(results_csv, index=False)
+        
+if __name__ == "__main__":
+    main()

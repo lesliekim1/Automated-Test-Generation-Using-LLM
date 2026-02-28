@@ -3,30 +3,42 @@ from pathlib import Path
 import sys
 import pandas as pd
 import subprocess
-import re
 
+# TODO 
+# 1. httpie & markup & tqdm
+# 2. pysnooper & sanic
+# 3. tornado
+# 4. ansible
+# 5. fastapi
+# 6. black
+# 7. matplotlib
+# 8. thefuck
+# 9. luigi
+# 10. scrapy
+# 11. youtubedl
+# 12. keras
 TEST_FILES = {
-    "ansible": "test/units/errors/test_errors.py",  #
-    "black": "tests/test_black.py",
-    "calculator": "tests/test_calc.py",
-    "cookiecutter": "tests/test_generate_file.py",
-    "expression": "tests/test_expression.py",
-    "fastapi": "tests/test_jsonable_encoder.py",
-    "httpie": "tests/test_exit_status.py",
-    "keras": "tests/test_loss_masking.py",
-    "luigi": "test/factorial_test.py",
-    "markup": "tests/test_markup.py",
-    "matplotlib": "lib/matplotlib/tests/test_container.py",
-    "middle": "tests/test_middle.py",
-    "pandas": "pandas/tests/arithmetic/test_numeric.py",
-    "pysnooper": "tests/test_pysnooper.py",
-    "sanic": "tests/test_middleware.py",
-    "scrapy": "tests/test_command_fetch.py",
-    "spacy": "spacy/tests/tokenizer/test_tokenizer.py",
-    "thefuck": "tests/test_logs.py",
-    "tornado": "tornado/test/escape_test.py",
-    "tqdm": "tqdm/tests/tests_tqdm.py",
-    "youtubedl": "test/test_age_restriction.py",
+    "ansible": "test/units/errors/test_errors.py", # 18 
+    "black": "tests/test_black.py", #23 
+    "calculator": "tests/test_calc.py", #TODO
+    "cookiecutter": "tests/test_generate_file.py", #TODO
+    "expression": "tests/test_expression.py", #TODO
+    "fastapi": "tests/test_jsonable_encoder.py", #16 
+    "httpie": "tests/test_exit_status.py", #5 
+    "keras": "tests/test_loss_masking.py", #45 
+    "luigi": "test/factorial_test.py", #33 
+    "markup": "tests/test_markup.py", #2 
+    "matplotlib": "lib/matplotlib/tests/test_container.py", #30 
+    "middle": "tests/test_middle.py", #TODO
+    "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
+    "pysnooper": "tests/test_pysnooper.py", #3 
+    "sanic": "tests/test_middleware.py", #5 
+    "scrapy": "tests/test_command_fetch.py", #40 
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
+    "thefuck": "tests/test_logs.py", #32 
+    "tornado": "tornado/test/escape_test.py", #16 
+    "tqdm": "tqdm/tests/tests_tqdm.py", #9 
+    "youtubedl": "test/test_age_restriction.py", #43
 }
 
 # Check if project input is valid
@@ -101,15 +113,23 @@ def main():
         python = sys.executable
 
         print("INSTALLING PACKAGES ...")
-        if project not in installed_projects:
+        
+        # Check if packages already exist to skip pip install
+        install_marker = project_dir / ".editable_installed"
+        if install_marker.exists():
+            print("Packages already installed for this project, skipping ...")
+            result3 = subprocess.CompletedProcess(args=[], returncode=0)
+            
+        else:
             result3 = subprocess.run(
                 [python, "-m", "pip", "install", "-e", "."],
                 cwd=str(project_dir),
+                capture_output=True,
+                text=True,
             )
-            installed_projects.add(project)
-        else:
-            print("Packages already installed for this project, skipping.")
-            result3 = subprocess.CompletedProcess(args=[], returncode=0)
+            # Mark this program as successfully installed to skip it
+            if result3.returncode == 0:
+                install_marker.write_text("ok\n")
 
         if result3.returncode != 0:
             print("ERROR: PIP INSTALL FAILED ...")
@@ -145,3 +165,6 @@ def main():
 
         record_result(df, program_name, result)
         df.to_csv(results_csv, index=False)
+        
+if __name__ == "__main__":
+    main()

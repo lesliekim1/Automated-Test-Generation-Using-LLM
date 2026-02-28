@@ -92,3 +92,6 @@ def main():
         
         record_result(df, program_name, kept_bool, coverage_delta)
         df.to_csv(results_csv, index=False)
+        
+if __name__ == "__main__":
+    main()

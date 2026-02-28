@@ -40,7 +40,7 @@ black_20,test_black.py,True,test_black_LLAMA_STATEMENTCOMPLETE.py,,,33.0,,,,,STA
 black_21,test_black.py,True,test_black_LLAMA_STATEMENTCOMPLETE.py,,,32.0,,,,,STATEMENTCOMPLETE
 black_22,test_black.py,True,test_black_LLAMA_STATEMENTCOMPLETE.py,,,31.0,,,,,STATEMENTCOMPLETE
 black_23,test_black.py,True,test_black_LLAMA_STATEMENTCOMPLETE.py,,,29.0,,,,,STATEMENTCOMPLETE
-calculator_1,test_calc.py,True,test_calc_LLAMA_STATEMENTCOMPLETE.py,,,100.0,,,,,STATEMENTCOMPLETE
+calculator_1,test_calc.py,True,test_calc_LLAMA_STATEMENTCOMPLETE.py,True,,100.0,,,,,STATEMENTCOMPLETE
 cookiecutter_1,test_generate_file.py,True,test_generate_file_LLAMA_STATEMENTCOMPLETE.py,,,44.0,,,,,STATEMENTCOMPLETE
 cookiecutter_2,test_generate_file.py,True,test_generate_file_LLAMA_STATEMENTCOMPLETE.py,,,45.0,,,,,STATEMENTCOMPLETE
 cookiecutter_3,test_generate_file.py,True,test_generate_file_LLAMA_STATEMENTCOMPLETE.py,,,41.0,,,,,STATEMENTCOMPLETE

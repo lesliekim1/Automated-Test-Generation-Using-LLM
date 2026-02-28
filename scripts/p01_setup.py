@@ -70,3 +70,6 @@ def main():
      
     chosen_projects = select_projects(args.project)
     t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir)
+
+if __name__ == "__main__":
+    main()

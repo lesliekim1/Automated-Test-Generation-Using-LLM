@@ -18,11 +18,11 @@ TEST_FILES = {
     "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", 
     "middle": "tests/test_middle.py", 
-    "pandas": "pandas/tests/arithmetic/test_numeric.py", ##
+    "pandas": "pandas/tests/arithmetic/test_numeric.py", 
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
     "scrapy": "tests/test_command_fetch.py", 
-    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", ##
+    "spacy": "spacy/tests/tokenizer/test_tokenizer.py", 
     "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
     "tqdm": "tqdm/tests/tests_tqdm.py", 
@@ -266,3 +266,6 @@ def main():
             
         df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name  
         df.to_csv(results_csv, index=False)
+        
+if __name__ == "__main__":
+    main()

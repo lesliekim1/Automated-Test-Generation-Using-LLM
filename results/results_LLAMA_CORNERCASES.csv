@@ -40,7 +40,7 @@ black_20,test_black.py,True,test_black_LLAMA_CORNERCASES.py,,,33.0,,,,,CORNERCAS
 black_21,test_black.py,True,test_black_LLAMA_CORNERCASES.py,,,32.0,,,,,CORNERCASES
 black_22,test_black.py,True,test_black_LLAMA_CORNERCASES.py,,,31.0,,,,,CORNERCASES
 black_23,test_black.py,True,test_black_LLAMA_CORNERCASES.py,,,29.0,,,,,CORNERCASES
-calculator_1,test_calc.py,True,test_calc_LLAMA_CORNERCASES.py,,,100.0,,,,,CORNERCASES
+calculator_1,test_calc.py,True,test_calc_LLAMA_CORNERCASES.py,True,,100.0,,,,,CORNERCASES
 cookiecutter_1,test_generate_file.py,True,test_generate_file_LLAMA_CORNERCASES.py,,,44.0,,,,,CORNERCASES
 cookiecutter_2,test_generate_file.py,True,test_generate_file_LLAMA_CORNERCASES.py,,,45.0,,,,,CORNERCASES
 cookiecutter_3,test_generate_file.py,True,test_generate_file_LLAMA_CORNERCASES.py,,,41.0,,,,,CORNERCASES
