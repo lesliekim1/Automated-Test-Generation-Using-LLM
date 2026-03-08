@@ -100,15 +100,14 @@ def main():
             [python, "-m", "pytest", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
             cwd=str(project_dir),
             stdout=subprocess.PIPE,
-            text=True
+            text=True,
+            stderr=subprocess.PIPE
         )
         
         coverage_after = get_coverage_number(result2)
-        print("PRINTING STATEMENT COVERAGE ...")
-        if coverage_after is None:
-            print(result2.stdout)
+        print("GETTING STATEMENT COVERAGE ...")
         
-        # If pytest or other errors has occurred, then program failed the third filter
+        # If error has occurred, then program failed the third filter
         if coverage_after is None:
             df.loc[df["program_name"] == program_name, "coverage_after"] = pd.NA
             print("ERROR: CANNOT COLLECT COVERAGE ...")

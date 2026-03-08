@@ -39,8 +39,7 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
           
-# Update pass column with either true (pass) or false (fails), and update 
-# discard_reason column with 2 if pass failed
+# Update pass column with either true or false, and update discard_reason column with 2 if pass failed
 def record_result(df, program_name, passes_bool):
     df.loc[df["program_name"] == program_name, "passes"] = passes_bool
         
@@ -102,27 +101,17 @@ def main():
 
         for i in range(5):
             print(f"RUN #{i+1} ...")
-            try:
-                result = subprocess.run(
-                    [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
-                    cwd=str(project_dir),
-                    stdout=subprocess.PIPE,
-                    text=True,
-                    timeout=120
-                )
-                codes.append(result.returncode)
 
-            # To avoid slow pytest running, such as possible infinite loops
-            except subprocess.TimeoutExpired:
-                print("**ERROR: timeout, marking as failure ...")
-                passes_bool = False
-                break 
+            result = subprocess.run(
+                [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
+                cwd=str(project_dir)
+            )
+            codes.append(result.returncode)
 
         if passes_bool:
             passes_bool = (len(set(codes)) == 1)
 
         record_result(df, program_name, passes_bool)
-
     df.to_csv(results_csv, index=False)
 
 if __name__ == "__main__":

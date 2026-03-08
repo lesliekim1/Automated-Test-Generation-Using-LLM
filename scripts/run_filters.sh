@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Automate running all filters py files (p04 - p07)
 # run: ./run_filters.sh <project1> <project2> <project3> ...
 # example: ./run_filters.sh calculator ansible
@@ -17,16 +17,12 @@ FILES=(
 
 for PROJECT in "$@"; do
     echo
-    echo "===================================="
-    echo "Running pipeline for project: $PROJECT"
-    echo "===================================="
+    echo "PROJECT: $PROJECT"
     echo
 
     for name in "${FILES[@]}"; do
         echo
-        echo "===================================="
-        echo "Processing: $name"
-        echo "===================================="
+        echo "RUNNING FILTERS FOR: $name"
 
         echo "---- BUILD FILTER ----"
         python3 p04_build_filter.py -p "$PROJECT" -f "$name"
@@ -38,5 +34,3 @@ for PROJECT in "$@"; do
         python3 p07_coverage_improvement_filter.py -p "$PROJECT" -f "$name"
     done
 done
-
-echo "all filters done"

@@ -38,8 +38,7 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             ) 
 
-# Update kept column with either true (pass) or false (fails), and update 
-# discard_reason column with 3 if kept failed
+# Update kept column with either true or false, and update discard_reason column with 3 if kept failed
 def record_result(df, program_name, kept_bool, coverage_delta):
     if not kept_bool:
         df.loc[df["program_name"] == program_name, "discard_reason"] = 3
@@ -82,14 +81,18 @@ def main():
     
     for index, row in df_cov.iterrows():
         program_name = row["program_name"]
-        
-        coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
-        df.loc[df["program_name"] == program_name, "coverage_delta"] = coverage_delta
 
-        # An extended test class is only "kept" when difference is greater than zero
-        kept_bool = coverage_delta > 0
+        # If coverage_after is missing, treat it as "no improvement"
+        if pd.isna(row["coverage_after"]):
+            kept_bool = False
+            
+        else:
+            coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
+            kept_bool = coverage_delta > 0
+
+        df.loc[df["program_name"] == program_name, "coverage_delta"] = coverage_delta
         df.loc[df["program_name"] == program_name, "kept"] = kept_bool
-        
+
         record_result(df, program_name, kept_bool, coverage_delta)
         df.to_csv(results_csv, index=False)
         

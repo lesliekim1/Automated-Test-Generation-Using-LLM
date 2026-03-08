@@ -55,7 +55,8 @@ CUT_FILES = {
 }
 
 LLMS = {
-    "llama": "llama3.2:3b"
+    "llama": "llama3.2:3b",
+    "deepseek": "deepseek-coder:6.7b"
 }
 
 # Check if project input is valid

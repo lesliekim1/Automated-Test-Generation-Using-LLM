@@ -15,6 +15,7 @@ pip install -r requirements.txt
 
 This project uses [Ollama](https://ollama.com/) to run large language models locally for automated test generation. Install the model(s):
 - [llama3.2:3b](https://ollama.com/library/llama3.2:3b)
+- [deepseek-coder:6.7b](https://ollama.com/library/deepseek-coder:6.7b)
 
 ## Running 
 To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) CLI (`t4p`) and run this project, activate the virtual environment using:
@@ -26,7 +27,6 @@ source .venv/Scripts/activate
 To run all filters for a project (e.g. ./run_filters.sh calculator ansible):
 
 ```bash
-cd scripts
 ./run_filters.sh <project1> <project2> <project3> ...
 ```
 
@@ -116,7 +116,16 @@ options:
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-p08_analysis.py
+[p08_analysis.py](p08_analysis.py)
+```bash
+usage: p08_analysis.py [-h] [-f FILE]
+
+create tables to display the results (overall success rate and each filter success rates).
+
+options:
+  -h, --help              show this help message and exit
+  -f FILE, --file FILE    CSV filename in results directory that records the data.
+```
 
 ## License 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
