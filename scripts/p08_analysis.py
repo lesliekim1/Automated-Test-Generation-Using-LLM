@@ -22,6 +22,12 @@ def main():
     df = pd.read_csv(results_csv)
     df = df[df["usable"] == True]
     
+    # Replace these two prompts name to use same prompt names from Meta's paper
+    df["prompt_mode"] = df["prompt_mode"].replace({
+        "TESTONLY": "EXTENDTEST",
+        "TESTCUT": "EXTENDCOV"
+    })
+    
     prompt_mode = df["prompt_mode"].iloc[0]
     total_usable = len(df)
     build_count = df["builds"].sum()
@@ -56,6 +62,35 @@ def main():
 
     print("\n" + overall_table.to_string(index=False))
     print("\n" + filter_table.to_string(index=False))
+    
+    # Combined overall and filter tables (manually typed data)
+    combined_success = 27 + 23 + 28 + 19
+    combined_trials = 328 * 4
+    combined_build = 60 + 69 + 97 + 42
+    combined_pass = 60 + 68 + 97 + 41
+
+    combined_overall_data = [
+        ["Llama", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
+    ]
+
+    combined_overall_table = pd.DataFrame(
+        combined_overall_data,
+        columns=["LLM", "Successful trials", "Total trials", "Success rate"]
+    )
+
+    combined_filter_data = [
+        ["Llama", "Build", combined_build, combined_trials, round(combined_build / combined_trials, 2)],
+        ["Llama", "Pass", combined_pass, combined_build, round(combined_pass / combined_build, 2)],
+        ["Llama", "Add Coverage", combined_success, combined_pass, round(combined_success / combined_pass, 2)]
+    ]
+
+    combined_filter_table = pd.DataFrame(
+        combined_filter_data,
+        columns=["LLM", "Filter", "Successful trials", "Total trials", "Success rate"]
+    )
+
+    print("\n" + combined_overall_table.to_string(index=False))
+    print("\n" + combined_filter_table.to_string(index=False))
 
 if __name__ == "__main__":
     main()
