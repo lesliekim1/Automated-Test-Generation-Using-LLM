@@ -107,14 +107,8 @@ def main():
         coverage_after = get_coverage_number(result2)
         print("GETTING STATEMENT COVERAGE ...")
         
-        # If error has occurred, then program failed the third filter
-        if coverage_after is None:
-            df.loc[df["program_name"] == program_name, "coverage_after"] = pd.NA
-            print("ERROR: CANNOT COLLECT COVERAGE ...")
-            
-        else:
-            df.loc[df["program_name"] == program_name, "coverage_after"] = int(coverage_after)
-            print("SUCCESS: COVERAGE COLLECTED ...")
+        df.loc[df["program_name"] == program_name, "coverage_after"] = int(coverage_after)
+        print("SUCCESS: COVERAGE COLLECTED ...")
             
         df.to_csv(results_csv, index=False)
         

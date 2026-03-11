@@ -95,7 +95,7 @@ def main():
         
         print(f"[{program_name}] PASS FILTER: {llm_test_file}")
         
-        # Run the pass filter 5 times to catch any flaky behavior
+        # Run the pass filter 5 times to catch flakiness by using pytest
         codes = []
         passes_bool = True
 

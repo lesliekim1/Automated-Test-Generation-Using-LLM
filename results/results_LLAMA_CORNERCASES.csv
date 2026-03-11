@@ -145,8 +145,8 @@ luigi_30,factorial_test.py,True,factorial_test_LLAMA_CORNERCASES.py,False,,51.0,
 luigi_31,factorial_test.py,True,factorial_test_LLAMA_CORNERCASES.py,False,,51.0,,,,1.0,CORNERCASES
 luigi_32,factorial_test.py,True,factorial_test_LLAMA_CORNERCASES.py,False,,51.0,,,,1.0,CORNERCASES
 luigi_33,factorial_test.py,True,factorial_test_LLAMA_CORNERCASES.py,False,,51.0,,,,1.0,CORNERCASES
-markup_1,test_markup.py,True,test_markup_LLAMA_STATEMENT_COMPLETE.py,True,True,100.0,100.0,0.0,False,3.0,CORNERCASES
-markup_2,test_markup.py,True,test_markup_LLAMA_STATEMENT_COMPLETE.py,True,True,100.0,100.0,0.0,False,3.0,CORNERCASES
+markup_1,test_markup.py,True,test_markup_LLAMA_CORNERCASES.py,True,True,100.0,100.0,0.0,False,3.0,CORNERCASES
+markup_2,test_markup.py,True,test_markup_LLAMA_CORNERCASES.py,True,True,100.0,100.0,0.0,False,3.0,CORNERCASES
 matplotlib_1,test_container.py,True,test_container_LLAMA_CORNERCASES.py,False,,15.0,,,,1.0,CORNERCASES
 matplotlib_2,test_container.py,True,test_container_LLAMA_CORNERCASES.py,False,,15.0,,,,1.0,CORNERCASES
 matplotlib_3,test_container.py,True,test_container_LLAMA_CORNERCASES.py,False,,15.0,,,,1.0,CORNERCASES

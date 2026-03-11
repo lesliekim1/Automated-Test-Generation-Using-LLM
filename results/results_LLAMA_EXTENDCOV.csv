@@ -356,7 +356,7 @@ sanic_2,test_middleware.py,True,test_middleware_LLAMA_TESTCUT.py,False,,25.0,,,,
 sanic_3,test_middleware.py,True,test_middleware_LLAMA_TESTCUT.py,False,,25.0,,,,1.0,TESTCUT
 sanic_4,test_middleware.py,True,test_middleware_LLAMA_TESTCUT.py,False,,25.0,,,,1.0,TESTCUT
 sanic_5,test_middleware.py,True,test_middleware_LLAMA_TESTCUT.py,False,,25.0,,,,1.0,TESTCUT
-scrapy_1,test_command_fetch.py,True,test_command_fetch_LLAMA_TESTCUT.py,True,False,31.0,,,,2.0,TESTCUT
+scrapy_1,test_command_fetch.py,True,test_command_fetch_LLAMA_TESTCUT.py,True,True,31.0,31.0,0.0,False,3.0,TESTCUT
 scrapy_2,test_command_fetch.py,True,test_command_fetch_LLAMA_TESTCUT.py,False,,32.0,,,,1.0,TESTCUT
 scrapy_3,test_command_fetch.py,True,test_command_fetch_LLAMA_TESTCUT.py,False,,32.0,,,,1.0,TESTCUT
 scrapy_4,test_command_fetch.py,True,test_command_fetch_LLAMA_TESTCUT.py,True,True,32.0,32.0,0.0,False,3.0,TESTCUT

@@ -24,7 +24,7 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 source .venv/Scripts/activate
 ```
 
-To run all filters for a project (e.g. ./run_filters.sh calculator ansible):
+To automate running all filters for a project (e.g. ./run_filters.sh calculator ansible):
 
 ```bash
 ./run_filters.sh <project1> <project2> <project3> ...

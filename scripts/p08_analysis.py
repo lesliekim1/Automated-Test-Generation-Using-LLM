@@ -67,7 +67,7 @@ def main():
     combined_success = 27 + 23 + 28 + 19
     combined_trials = 328 * 4
     combined_build = 60 + 69 + 97 + 42
-    combined_pass = 60 + 68 + 97 + 41
+    combined_pass = 60 + 69 + 97 + 42
 
     combined_overall_data = [
         ["Llama", combined_success, combined_trials, round(combined_success / combined_trials, 2)]

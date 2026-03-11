@@ -82,13 +82,8 @@ def main():
     for index, row in df_cov.iterrows():
         program_name = row["program_name"]
 
-        # If coverage_after is missing, treat it as "no improvement"
-        if pd.isna(row["coverage_after"]):
-            kept_bool = False
-            
-        else:
-            coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
-            kept_bool = coverage_delta > 0
+        coverage_delta = int(row["coverage_after"]) - int(row["coverage_before"])
+        kept_bool = coverage_delta > 0
 
         df.loc[df["program_name"] == program_name, "coverage_delta"] = coverage_delta
         df.loc[df["program_name"] == program_name, "kept"] = kept_bool
