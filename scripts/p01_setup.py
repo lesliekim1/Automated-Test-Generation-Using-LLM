@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import subprocess
 
+# program name, bug id (from t4p info)
 PROJECTS = {
     "ansible": 18,
     "black": 23,
@@ -34,8 +35,7 @@ def select_projects(project):
         if project not in PROJECTS:
             sys.exit(f"Unknown project: {project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         chosen_projects = {project: PROJECTS[project]} 
-        
-    # All projects
+
     else:
         chosen_projects = PROJECTS
     return chosen_projects

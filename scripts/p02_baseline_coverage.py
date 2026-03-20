@@ -79,7 +79,7 @@ def select_projects(project):
         if project not in PROJECTS:
             sys.exit(f"Unknown project: {project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         chosen_projects = {project: PROJECTS[project]} 
-        
+
     else:
         chosen_projects = PROJECTS
     return chosen_projects
@@ -89,7 +89,6 @@ def get_coverage_number(result2):
     for line in result2.stdout.splitlines():
         line = line.strip()
 
-        # The last substring of the line with TOTAL is coverage number
         if line.startswith("TOTAL"):
             return line.split()[-1].replace("%", "")
 
@@ -132,7 +131,6 @@ def main():
 
                 else:
                     result = subprocess.run(
-                        # str(pip)
                         [python, "-m", "pip", "install", "-e", "."],
                         cwd=str(project_dir)
                     )

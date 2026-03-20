@@ -22,7 +22,7 @@ def main():
     df = pd.read_csv(results_csv)
     df = df[df["usable"] == True]
     
-    # Replace these two prompts name to use same prompt names from Meta's paper
+    # Replace these two prompts name to use same prompt names from Meta's paper (testonly and testcut were old names)
     df["prompt_mode"] = df["prompt_mode"].replace({
         "TESTONLY": "EXTENDTEST",
         "TESTCUT": "EXTENDCOV"
@@ -70,7 +70,7 @@ def main():
     combined_pass = 60 + 69 + 97 + 42
 
     combined_overall_data = [
-        ["Llama", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
+        ["DeepSeek-Coder", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
     ]
 
     combined_overall_table = pd.DataFrame(
@@ -79,9 +79,9 @@ def main():
     )
 
     combined_filter_data = [
-        ["Llama", "Build", combined_build, combined_trials, round(combined_build / combined_trials, 2)],
-        ["Llama", "Pass", combined_pass, combined_build, round(combined_pass / combined_build, 2)],
-        ["Llama", "Add Coverage", combined_success, combined_pass, round(combined_success / combined_pass, 2)]
+        ["DeepSeek-Coder", "Build", combined_build, combined_trials, round(combined_build / combined_trials, 2)],
+        ["DeepSeek-Coder", "Pass", combined_pass, combined_build, round(combined_pass / combined_build, 2)],
+        ["DeepSeek-Coder", "Add Coverage", combined_success, combined_pass, round(combined_success / combined_pass, 2)]
     ]
 
     combined_filter_table = pd.DataFrame(

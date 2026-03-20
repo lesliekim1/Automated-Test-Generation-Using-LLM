@@ -4,7 +4,6 @@ import sys
 import pandas as pd
 import subprocess
 
-# A chosen test file from each Tests4Py project 
 TEST_FILES = {
     "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 
@@ -84,7 +83,6 @@ def main():
     print(f"CSV FILE: {args.file}")
     
     for index, row in df_pass.iterrows():
-        # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
         project = program_name.split("_")[0]
         llm_test_file = row.get("llm_test_file")

@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 import pandas as pd
 
-# A chosen test file from each Tests4Py project 
 TEST_FILES = {
     "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 

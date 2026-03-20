@@ -9,10 +9,10 @@ if [ "$#" -lt 1 ]; then
 fi
 
 FILES=(
-  results_LLAMA_CORNERCASES.csv
-  results_LLAMA_EXTENDCOV.csv
-  results_LLAMA_EXTENDTEST.csv
-  results_LLAMA_STATEMENTCOMPLETE.csv
+  results_DEEPSEEK_CORNERCASES.csv
+  results_DEEPSEEK_EXTENDCOV.csv
+  results_DEEPSEEK_EXTENDTEST.csv
+  results_DEEPSEEK_STATEMENTCOMPLETE.csv
 )
 
 for PROJECT in "$@"; do
@@ -28,7 +28,7 @@ for PROJECT in "$@"; do
         python3 p04_build_filter.py -p "$PROJECT" -f "$name"
         echo "---- PASS FILTER ----"
         python3 p05_pass_filter.py -p "$PROJECT" -f "$name"
-        echo "---- LLM COVERAGE ----"
+        echo "---- GETTING COVERAGE FROM LLM-GENERATED TEST ----"
         python3 p06_llm_coverage.py -p "$PROJECT" -f "$name"
         echo "---- COVERAGE IMPROVEMENT FILTER ----"
         python3 p07_coverage_improvement_filter.py -p "$PROJECT" -f "$name"

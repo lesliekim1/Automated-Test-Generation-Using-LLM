@@ -4,7 +4,6 @@ import sys
 import pandas as pd
 import ollama
 
-# A chosen test file from each Tests4Py project 
 TEST_FILES = {
     "ansible": "test/units/errors/test_errors.py", 
     "black": "tests/test_black.py", 
@@ -14,7 +13,7 @@ TEST_FILES = {
     "fastapi": "tests/test_jsonable_encoder.py", 
     "httpie": "tests/test_exit_status.py", 
     "keras": "tests/test_loss_masking.py", 
-    "luigi": "test/factorial_test.py", 
+    "luigi": "test/factorial_test.py",
     "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", 
     "middle": "tests/test_middle.py", 
@@ -115,7 +114,6 @@ def main():
     
     # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
     df = pd.read_csv(results_csv)
-    
     df["llm_test_file"] = df["llm_test_file"].astype("string")
     df_usable = df[(df["usable"] == True) & df["llm_test_file"].isna()]
     df["prompt_mode"] = df["prompt_mode"].astype("string")
@@ -129,10 +127,10 @@ def main():
     # Prompts are directly from Meta's paper (see Table 2 in pg 7)
     prompt_mode = str(args.number)
     if prompt_mode == "1":
-        mode = "TESTONLY" # equivalent to extend_test prompt
+        mode = "TESTONLY" # equivalent to extend_test prompt (TESTONLY is old name)
         
     elif prompt_mode == "2":
-        mode = "TESTCUT" # equivalent to extend_coverage prompt
+        mode = "TESTCUT" # equivalent to extend_coverage prompt (TESTCUT is old name)
         
     elif prompt_mode == "3":
         mode = "CORNERCASES"
@@ -185,7 +183,6 @@ def main():
 
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
-            # Prompt is the same as from Meta's study (output format is instructions for LLM)
             prompt = f"""
             Here is a Python unit test class and the class that it tests:
 
@@ -261,7 +258,7 @@ def main():
             print(f"**ERROR: FAILED TO GENERATE FOR {program_name}: {e} ...\n")
             continue
             
-        # Output to file in same dir path as the original test class
+        # Output to file in same directory as the original test class
         with open(output_file, "w", encoding="utf-8") as py_file:
             py_file.write(llm_response)
             

@@ -87,7 +87,6 @@ def main():
     print(f"CSV FILE: {args.file}")
 
     for index, row in df_usable.iterrows():
-        # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
         project = program_name.split("_")[0]
         llm_test_file = row.get("llm_test_file")
@@ -95,7 +94,6 @@ def main():
         project_dir = tmp_dir / program_name
         original_test_file = project_dir / TEST_FILES[project]
         llm_test_path = original_test_file.with_name(str(llm_test_file))
-        python = sys.executable
         
         print(f"[{program_name}] BUILD FILTER (pytest --collect-only): {llm_test_file}")
 
