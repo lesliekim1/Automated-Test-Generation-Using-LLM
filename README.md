@@ -4,8 +4,7 @@ This repository contains scripts for a replication study of [Meta’s TestGen-LL
 
 ## Experiment
 
-This repository implements the TestGen-LLM workflow described in our experimental design. 
-For each trial (a project version from Tests4Py):
+For each trial (a buggy project version from Tests4Py):
 
 1. Baseline coverage is measured using the original test suite.
 2. The LLM generates extended tests using multiple prompt styles.
