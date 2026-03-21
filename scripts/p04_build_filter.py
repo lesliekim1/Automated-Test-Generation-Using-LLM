@@ -9,14 +9,14 @@ TEST_FILES = {
     "black": "tests/test_black.py", 
     "calculator": "tests/test_calc.py", 
     "cookiecutter": "tests/test_generate_file.py", 
-    "expression": "tests/test_expression.py", 
+    "expression": "tests/test_expression.py",
     "fastapi": "tests/test_jsonable_encoder.py", 
-    "httpie": "tests/test_exit_status.py", 
-    "keras": "tests/test_loss_masking.py", 
+    "httpie": "tests/test_exit_status.py",
+    "keras": "tests/test_loss_masking.py",
     "luigi": "test/factorial_test.py", 
     "markup": "tests/test_markup.py", 
     "matplotlib": "lib/matplotlib/tests/test_container.py", 
-    "middle": "tests/test_middle.py", 
+    "middle": "tests/test_middle.py",
     "pandas": "pandas/tests/arithmetic/test_numeric.py", 
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
@@ -90,6 +90,7 @@ def main():
         program_name = row["program_name"]
         project = program_name.split("_")[0]
         llm_test_file = row.get("llm_test_file")
+        python = sys.executable
 
         project_dir = tmp_dir / program_name
         original_test_file = project_dir / TEST_FILES[project]
@@ -100,7 +101,10 @@ def main():
         # Run pytest --collect-only to replicate build filter
         result = subprocess.run(
             ["pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
-            cwd=str(project_dir)
+            cwd=str(project_dir),
+            stdout=subprocess.PIPE,
+            text=True,
+            stderr=subprocess.PIPE
         )
 
         record_result(df, program_name, result)

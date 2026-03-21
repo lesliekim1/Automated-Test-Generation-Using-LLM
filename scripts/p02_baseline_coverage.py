@@ -94,8 +94,7 @@ def get_coverage_number(result2):
 
 # Run a test file with pytest from Tests4Py project(s) to record statement coverage
 def main():
-    parser = argparse.ArgumentParser(description = "get statement coverage of a test class from " \
-    "each Tests4Py project.")
+    parser = argparse.ArgumentParser(description = "get baseline statement coverage of a test class from each Tests4Py project.")
 
     parser.add_argument(
         "-p", "--project",

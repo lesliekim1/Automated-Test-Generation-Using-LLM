@@ -102,7 +102,10 @@ def main():
 
             result = subprocess.run(
                 [python, "-m", "pytest", str(llm_test_path.relative_to(project_dir))],
-                cwd=str(project_dir)
+                cwd=str(project_dir),
+                stdout=subprocess.PIPE,
+                text=True,
+                stderr=subprocess.PIPE
             )
             codes.append(result.returncode)
 

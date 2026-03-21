@@ -1,6 +1,20 @@
 # Automated-Test-Generation-Using-LLM
 
-This repository contains scripts for a replication study of [Meta’s TestGen-LLM](https://arxiv.org/abs/2402.09171), using Python and pytest. Its purpose is to evaluate whether applying Meta's TestGen-LLM method on the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) results in similar overall and filter success rates on the Tests4Py benchmark to those reported in Meta's study.
+This repository contains scripts for a replication study of [Meta’s TestGen-LLM](https://arxiv.org/abs/2402.09171), implemented using Python and pytest. The goal is to evaluate whether applying the TestGen-LLM method to the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) produces similar overall and filter success rates as those reported in Meta’s study.
+
+## Experiment
+
+This repository implements the TestGen-LLM workflow described in our experimental design. 
+For each trial (a project version from Tests4Py):
+
+1. Baseline coverage is measured using the original test suite.
+2. The LLM generates extended tests using multiple prompt styles.
+3. Generated tests are filtered through:
+   - Build filter (test must run without errors using pytest --collect-only)
+   - Pass filter (run 5 times with pytest to detect flakiness)
+   - Coverage improvement filter (must increase statement coverage)
+4. Results are recorded in a CSV file, including coverage before/after and filter success outcomes.
+5. Final analysis computes overall and filter success rates.
 
 ## Installation
 
@@ -24,7 +38,7 @@ To use the [Tests4Py](https://github.com/smythi93/Tests4Py?tab=readme-ov-file) C
 source .venv/Scripts/activate
 ```
 
-To automate running all filters for a project (e.g. ./run_filters.sh calculator ansible):
+To automate running all filter files for one or more projects (e.g. ./run_filters.sh calculator ansible):
 
 ```bash
 ./run_filters.sh <project1> <project2> <project3> ...
@@ -36,7 +50,7 @@ To automate running all filters for a project (e.g. ./run_filters.sh calculator 
 ```bash
 usage: p01_setup.py [-h] [-p PROJECT]
 
-checkout all Tests4Py projects.
+set up the experiment by installing all Tests4Py projects and their corresponding versions.
 
 options:
   -h, --help              show this help message and exit
@@ -47,18 +61,18 @@ options:
 ```bash
 usage: p02_baseline_coverage.py [-h] [-p PROJECT]
 
-get statement coverage of a test class from each Tests4Py project.
+get baseline statement coverage of a test class from each Tests4Py project.
 
 options:
   -h, --help              show this help message and exit
-  -p, --project PROJECT   get statment coverage for a single project.
+  -p, --project PROJECT   get statement coverage for a single project.
 ```
 
 [p03_generate_llm_tests.py](scripts/p03_generate_llm_tests.py)
 ```bash
 usage: p03_generate_llm_tests.py [-h] [-m MODEL] [-p PROJECT] [-n NUMBER] [-f FILE]
 
-generate and save extended test class to same path as original test class.
+generate an LLM extended test class using the selected model and prompt, and save it to the same path as the original test class.
 
 options:
   -h, --help              show this help message and exit

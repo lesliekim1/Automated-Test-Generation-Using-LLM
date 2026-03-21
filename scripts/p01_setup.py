@@ -53,7 +53,7 @@ def t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir):
 
 # Retrieve and add Tests4Py project(s) into tmp folder using t4p checkout. 
 def main():
-    parser = argparse.ArgumentParser(description = "checkout all Tests4Py projects.")
+    parser = argparse.ArgumentParser(description = "set up the experiment by installing all Tests4Py projects and their corresponding versions.")
 
     parser.add_argument(
         "-p", "--project",

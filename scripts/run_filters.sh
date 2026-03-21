@@ -18,7 +18,6 @@ FILES=(
 for PROJECT in "$@"; do
     echo
     echo "PROJECT: $PROJECT"
-    echo
 
     for name in "${FILES[@]}"; do
         echo
@@ -28,7 +27,7 @@ for PROJECT in "$@"; do
         python3 p04_build_filter.py -p "$PROJECT" -f "$name"
         echo "---- PASS FILTER ----"
         python3 p05_pass_filter.py -p "$PROJECT" -f "$name"
-        echo "---- GETTING COVERAGE FROM LLM-GENERATED TEST ----"
+        echo "---- GETTING COVERAGE FROM LLM-GENERATED EXTENDED TEST ----"
         python3 p06_llm_coverage.py -p "$PROJECT" -f "$name"
         echo "---- COVERAGE IMPROVEMENT FILTER ----"
         python3 p07_coverage_improvement_filter.py -p "$PROJECT" -f "$name"

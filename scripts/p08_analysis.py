@@ -22,7 +22,7 @@ def main():
     df = pd.read_csv(results_csv)
     df = df[df["usable"] == True]
     
-    # Replace these two prompts name to use same prompt names from Meta's paper (testonly and testcut were old names)
+    # Replace old prompt names with actual prompt names from Meta's study
     df["prompt_mode"] = df["prompt_mode"].replace({
         "TESTONLY": "EXTENDTEST",
         "TESTCUT": "EXTENDCOV"

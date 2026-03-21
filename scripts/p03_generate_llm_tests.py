@@ -78,7 +78,7 @@ def validate_model(model):
 
 # Prompt an LLM to generate an extended test class file and output it to same path as the original test class
 def main():
-    parser = argparse.ArgumentParser(description = "generate and save extended test class to same path as original test class.")
+    parser = argparse.ArgumentParser(description = "generate an LLM extended test class using the selected model and prompt, and save it to the same path as the original test class.")
     
     parser.add_argument(
         "-m", "--model",
@@ -127,10 +127,10 @@ def main():
     # Prompts are directly from Meta's paper (see Table 2 in pg 7)
     prompt_mode = str(args.number)
     if prompt_mode == "1":
-        mode = "TESTONLY" # equivalent to extend_test prompt (TESTONLY is old name)
+        mode = "TESTONLY" # old name for the extend_test prompt (now EXTENDTEST)
         
     elif prompt_mode == "2":
-        mode = "TESTCUT" # equivalent to extend_coverage prompt (TESTCUT is old name)
+        mode = "TESTCUT" # old name for the extend_coverage prompt (now EXTENDCOV)
         
     elif prompt_mode == "3":
         mode = "CORNERCASES"
