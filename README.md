@@ -1,18 +1,18 @@
 # Automated-Test-Generation-Using-LLM
 
-This repository contains scripts for a replication study of [Meta’s TestGen-LLM](https://arxiv.org/abs/2402.09171), implemented using Python and pytest. The goal is to evaluate whether applying the TestGen-LLM method to the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) produces similar overall and filter success rates as those reported in Meta’s study.
+This repository contains scripts for a replication study of [Meta’s TestGen-LLM](https://arxiv.org/abs/2402.09171), implemented using Python and pytest. The goal is to evaluate whether applying the TestGen-LLM method to the [Tests4Py benchmark](https://arxiv.org/abs/2307.05147) produces similar overall and filter success rates to those reported in Meta’s study.
 
 ## Experiment
 
-For each trial (a buggy project version from Tests4Py):
+For each trial (a buggy version of a Tests4Py project):
 
-1. Baseline coverage is measured using the original test suite.
-2. The LLM generates extended tests using multiple prompt styles.
+1. Baseline coverage is measured using the original test class.
+2. The LLM generates extended tests using prompts from Meta's study.
 3. Generated tests are filtered through:
    - Build filter (test must run without errors using pytest --collect-only)
    - Pass filter (run 5 times with pytest to detect flakiness)
    - Coverage improvement filter (must increase statement coverage)
-4. Results are recorded in a CSV file, including coverage before/after and filter success outcomes.
+4. Results are recorded in a CSV file, including coverage before and after test generation, and filter success outcomes.
 5. Final analysis computes overall and filter success rates.
 
 ## Installation
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ### Ollama
 
-This project uses [Ollama](https://ollama.com/) to run large language models locally for automated test generation. Install the model(s):
+This project uses [Ollama](https://ollama.com/) to run large language models locally. Install the models:
 - [llama3.2:3b](https://ollama.com/library/llama3.2:3b)
 - [deepseek-coder:6.7b](https://ollama.com/library/deepseek-coder:6.7b)
 
