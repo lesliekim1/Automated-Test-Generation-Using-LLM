@@ -20,11 +20,11 @@ TEST_FILES = {
     "pandas": "pandas/tests/arithmetic/test_numeric.py", 
     "pysnooper": "tests/test_pysnooper.py", 
     "sanic": "tests/test_middleware.py", 
-    "scrapy": "tests/test_command_fetch.py", 
+    "scrapy": "tests/test_command_fetch.py",
     "spacy": "spacy/tests/tokenizer/test_tokenizer.py", 
     "thefuck": "tests/test_logs.py", 
     "tornado": "tornado/test/escape_test.py", 
-    "tqdm": "tqdm/tests/tests_tqdm.py", 
+    "tqdm": "tqdm/tests/tests_tqdm.py",
     "youtubedl": "test/test_age_restriction.py", 
 }
 
@@ -50,7 +50,7 @@ def record_result(df, program_name, result):
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print("BUILD SUCCESS ...")
 
-# Apply Meta's TestGen-LLM's first filter, which is to check for build correctness
+# Apply Meta's TestGen-LLM's first filter, which is to check for build correctness 
 def main():
     parser = argparse.ArgumentParser(
         description="check if an LLM-generated test class is built correctly."
@@ -83,7 +83,6 @@ def main():
         df_usable = df_usable[
             df_usable["program_name"].str.startswith(args.project + "_")
         ]
-
     print(f"CSV FILE: {args.file}")
 
     for index, row in df_usable.iterrows():
@@ -98,7 +97,7 @@ def main():
         
         print(f"[{program_name}] BUILD FILTER (pytest --collect-only): {llm_test_file}")
 
-        # Run pytest --collect-only to replicate build filter
+        # Run pytest --collect-only to replicate build filter (to check if extended test can compile)
         result = subprocess.run(
             ["pytest", "--collect-only", str(llm_test_path.relative_to(project_dir))],
             cwd=str(project_dir),
@@ -110,5 +109,4 @@ def main():
         record_result(df, program_name, result)
         df.to_csv(results_csv, index=False)
         
-if __name__ == "__main__":
-    main()
+main()

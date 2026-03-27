@@ -78,6 +78,7 @@ def main():
     
     print(f"CSV FILE: {args.file}")
     
+    # Coverage improvement exists if difference is greater than 0
     for index, row in df_cov.iterrows():
         program_name = row["program_name"]
 
@@ -90,5 +91,4 @@ def main():
         record_result(df, program_name, kept_bool, coverage_delta)
         df.to_csv(results_csv, index=False)
         
-if __name__ == "__main__":
-    main()
+main()

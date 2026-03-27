@@ -79,12 +79,11 @@ def select_projects(project):
         if project not in PROJECTS:
             sys.exit(f"Unknown project: {project}\nTests4Py projects:\n" + "\n".join(PROJECTS.keys()))
         chosen_projects = {project: PROJECTS[project]} 
-
     else:
         chosen_projects = PROJECTS
     return chosen_projects
 
-# Parse the coverage report output to get the coverage number only
+# Parse the coverage report output to get the statement coverage number only
 def get_coverage_number(result2):
     for line in result2.stdout.splitlines():
         line = line.strip()
@@ -92,7 +91,7 @@ def get_coverage_number(result2):
         if line.startswith("TOTAL"):
             return line.split()[-1].replace("%", "")
 
-# Run a test file with pytest from Tests4Py project(s) to record statement coverage
+# Run a test file of Tests4Py projects with pytest to record statement coverage
 def main():
     parser = argparse.ArgumentParser(description = "get baseline statement coverage of a test class from each Tests4Py project.")
 
@@ -114,28 +113,22 @@ def main():
     df = read_csv(file_path)
     chosen_projects = select_projects(args.project)
     
-    # Run pytest --cov on all chosen projects to record coverage to results.csv
+    # Run pytest --cov --cov-report=term on all chosen projects to record coverage to results.csv
     for project, num_bugs in chosen_projects.items():
         for bug_id in range(1, num_bugs + 1):
             program_name = f"{project}_{bug_id}"
             project_dir = tmp_dir / f"{project}_{bug_id}"
 
-            # Attempt to install the project's packages to ensure that environment is compatible
+            # Attempt to install the project's packages (only run on first buggy version) to ensure that it is compatible
             print(f"CHECKING IF {project}_{bug_id} IS USABLE ... ")
-
             if bug_id == 1:
-                # Skip pip install if needed for faster run (edit the string)
-                if project == "tqdm":
-                    result = subprocess.CompletedProcess(args=[], returncode=0)
-
-                else:
-                    result = subprocess.run(
-                        [python, "-m", "pip", "install", "-e", "."],
-                        cwd=str(project_dir)
-                    )
+                result = subprocess.run(
+                    [python, "-m", "pip", "install", "-e", "."],
+                    cwd=str(project_dir)
+                )
 
             if result.returncode == 0:
-                print("SUCCESS: ENVIRONMENT COMPATIBLE! ATTEMPTING TO GET COVERAGE ...")
+                print("SUCCESS: PROJECT COMPATIBLE! ATTEMPTING TO GET COVERAGE ...")
                 test_file = project_dir / TEST_FILES[project]
                 
                 result2 = subprocess.run(
@@ -167,7 +160,7 @@ def main():
                     }
                     print("ERROR: CANNOT COLLECT COVERAGE ...")
 
-                # If pytest --cov ran successfully, then project can be used for experiment
+                # If pytest ran successfully, then project can be used for experiment as a trial
                 else:
                     new_row = {
                         "program_name": program_name,
@@ -185,7 +178,7 @@ def main():
                     }
                     print("SUCCESS: COVERAGE COLLECTED ...")
 
-            # If pip install -e fails when installing packages because of incompatible environment
+            # If pip install -e fails when installing packages because of incompatibility
             else:
                 new_row = {
                     "program_name": program_name,
@@ -204,5 +197,4 @@ def main():
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     df.to_csv(file_path, index=False)
 
-if __name__ == "__main__":
-    main()
+main()

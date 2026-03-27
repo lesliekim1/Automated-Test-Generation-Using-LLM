@@ -43,11 +43,10 @@ def get_coverage_number(result2):
     for line in result2.stdout.splitlines():
         line = line.strip()
 
-        # The last substring of the line with TOTAL is coverage number
         if line.startswith("TOTAL"):
             return line.split()[-1].replace("%", "")
 
-# Run a LLM-generated test file with pytest from Tests4Py project(s) to record statement coverage
+# Run a LLM-generated test file with pytest to record its statement coverage
 def main():
     parser = argparse.ArgumentParser(description = "get statement coverage of a LLM-generated test class from " \
     "each Tests4Py project.")
@@ -79,7 +78,6 @@ def main():
     
     if args.project:
         df_cov = df_cov[df_cov["program_name"].str.startswith(args.project + "_")]
-        
     print(f"CSV FILE: {args.file}")
     
     for index, row in df_cov.iterrows():
@@ -93,13 +91,13 @@ def main():
         
         print(f"[{program_name}] LLM COVERAGE: {llm_test_file}")
         
-        # Run pytest --cov on the LLM-generated test file only
+        # Run pytest --cov --cov-report=term on the LLM-generated test file only
         result2 = subprocess.run(
             [python, "-m", "pytest", str(original_test_file.relative_to(project_dir)), str(llm_test_path.relative_to(project_dir)), "--cov", "--cov-report=term"],
             cwd=str(project_dir),
             stdout=subprocess.PIPE,
             text=True,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
         )
         
         coverage_after = get_coverage_number(result2)
@@ -110,5 +108,4 @@ def main():
             
         df.to_csv(results_csv, index=False)
         
-if __name__ == "__main__":
-    main()
+main()

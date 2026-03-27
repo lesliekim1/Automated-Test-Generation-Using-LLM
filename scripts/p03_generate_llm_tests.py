@@ -28,7 +28,7 @@ TEST_FILES = {
     "youtubedl": "test/test_age_restriction.py"
 }
 
-# A chosen "class under test" (CUT) file to give the LLM an example reference
+# A corresponding chosen "class under test" (CUT) file to be used as input for the LLM based on the prompt
 CUT_FILES = {
     "ansible": "lib/ansible/errors/__init__.py",
     "black": "black.py", 
@@ -68,7 +68,7 @@ def validate_project(project):
                 "\n".join(sorted(TEST_FILES.keys()))
             )  
 
-# Check if LLM model is valid
+# Check if LLM model input is valid
 def validate_model(model):
     if model not in LLMS:
         sys.exit(
@@ -76,7 +76,7 @@ def validate_model(model):
             "\n".join(sorted(LLMS.keys()))
         )   
 
-# Prompt an LLM to generate an extended test class file and output it to same path as the original test class
+# Prompt an LLM to generate an extended test class file and output it into the same path as the original test class
 def main():
     parser = argparse.ArgumentParser(description = "generate an LLM extended test class using the selected model and prompt, and save it to the same path as the original test class.")
     
@@ -112,7 +112,7 @@ def main():
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
     
-    # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
+    # Read results.csv and iterate through 'usable' projects only (projects that passed the setup and have baseline coverage recorded)
     df = pd.read_csv(results_csv)
     df["llm_test_file"] = df["llm_test_file"].astype("string")
     df_usable = df[(df["usable"] == True) & df["llm_test_file"].isna()]
@@ -121,23 +121,19 @@ def main():
     # Select a single project only
     if args.project:
         df_usable = df_usable[df_usable["program_name"].str.startswith(args.project + "_")]
-    
+
     print(f"MODEL: {LLMS[args.model]}")
     
     # Prompts are directly from Meta's paper (see Table 2 in pg 7)
     prompt_mode = str(args.number)
     if prompt_mode == "1":
         mode = "TESTONLY" # old name for the extend_test prompt (now EXTENDTEST)
-        
     elif prompt_mode == "2":
         mode = "TESTCUT" # old name for the extend_coverage prompt (now EXTENDCOV)
-        
     elif prompt_mode == "3":
         mode = "CORNERCASES"
-        
     elif prompt_mode == "4":
         mode = "STATEMENTCOMPLETE"
-        
     else:
         sys.exit("Invalid -n. Use 1, 2, 3, or 4.")
         
@@ -148,18 +144,18 @@ def main():
         # Get the program names in selected project (e.g. ansible_1, ansible_2, ...)
         program_name = row["program_name"]
         project = program_name.split("_")[0]
-        
+
         project_dir = tmp_dir / program_name
         original_test_file = project_dir / TEST_FILES[project]
         
-        # Skip if test file can't be found so that program doesn't crash
+        # Skip if test file can't be found so that program doesn't crash if running on all projects
         try:
             existing_test_class = original_test_file.read_text(encoding="utf-8")
         except FileNotFoundError:
-            print(f"**ERROR: Missing test file for {program_name}, skipping ...\n")
+            print(f"**ERROR: MISSING TEST FILE NAME FOR {program_name}, SKIPPING ...\n")
             continue
         
-        # Test only mode (extend_test prompt)
+        # extend_test prompt
         if (prompt_mode == "1"):
             df.loc[df["program_name"] == program_name, "prompt_mode"] = mode
             
@@ -171,7 +167,7 @@ def main():
             Write an extended version of the test class that includes additional tests to cover some extra corner cases.
             """
     
-        # Test and class under test mode (extend_coverage prompt)
+        # extend_coverage prompt
         elif (prompt_mode == "2"):
             class_under_test_file = project_dir / CUT_FILES[project]
             
@@ -242,7 +238,7 @@ def main():
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
         output_file = original_test_file.with_name(original_test_file.stem + "_" + args.model.upper() + "_" + mode + ".py")
          
-        # Prompt an LLM (default: Llama) to generate an extended test suite
+        # Prompt the selected LLM to generate an extended test suite
         try:
             response = ollama.chat(model=LLMS[args.model], messages=[
                 {
@@ -265,5 +261,4 @@ def main():
         df.loc[df["program_name"] == program_name, "llm_test_file"] = output_file.name  
         df.to_csv(results_csv, index=False)
         
-if __name__ == "__main__":
-    main()
+main()

@@ -62,12 +62,14 @@ def main():
 
     print("\n" + overall_table.to_string(index=False))
     print("\n" + filter_table.to_string(index=False))
+    print()
+    
     
     # Combined overall and filter tables (manually typed data)
-    combined_success = 27 + 23 + 28 + 19
+    combined_success = 45 + 33 + 57 + 65
     combined_trials = 328 * 4
-    combined_build = 60 + 69 + 97 + 42
-    combined_pass = 60 + 69 + 97 + 42
+    combined_build = 79 + 78 + 118 + 108
+    combined_pass = 79 + 78 + 118 + 108
 
     combined_overall_data = [
         ["DeepSeek-Coder", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
@@ -92,5 +94,4 @@ def main():
     print("\n" + combined_overall_table.to_string(index=False))
     print("\n" + combined_filter_table.to_string(index=False))
 
-if __name__ == "__main__":
-    main()
+main()

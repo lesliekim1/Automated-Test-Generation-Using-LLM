@@ -49,7 +49,7 @@ def record_result(df, program_name, passes_bool):
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print("SUCCESS: NO FLAKY DETECTED ...")
             
-# Apply Meta's TestGen-LLM's second filter, which is to check for flaky behavior in five executions
+# Apply Meta's TestGen-LLM's second filter, which is to check for flakiness from five runs
 def main():
     parser = argparse.ArgumentParser(description = "check for any flaky behavior by executing the LLM-generated test five times.")
     
@@ -94,7 +94,7 @@ def main():
         print(f"[{program_name}] PASS FILTER: {llm_test_file}")
         
         # Run the pass filter 5 times to catch flakiness by using pytest
-        codes = []
+        outputs = []
         passes_bool = True
 
         for i in range(5):
@@ -107,13 +107,12 @@ def main():
                 text=True,
                 stderr=subprocess.PIPE
             )
-            codes.append(result.returncode)
+            outputs.append(result.returncode)
 
         if passes_bool:
-            passes_bool = (len(set(codes)) == 1)
+            passes_bool = (len(set(outputs)) == 1)
 
         record_result(df, program_name, passes_bool)
     df.to_csv(results_csv, index=False)
 
-if __name__ == "__main__":
-    main()
+main()

@@ -3,7 +3,7 @@ from pathlib import Path
 import sys
 import subprocess
 
-# program name, bug id (from t4p info)
+# program name, num bugs (from t4p info --Tests4Py info command)
 PROJECTS = {
     "ansible": 18,
     "black": 23,
@@ -51,7 +51,7 @@ def t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir):
                 cwd=str(scripts_dir)
             )
 
-# Retrieve and add Tests4Py project(s) into tmp folder using t4p checkout. 
+# Retrieve Tests4Py project(s) by running t4p checkout. 
 def main():
     parser = argparse.ArgumentParser(description = "set up the experiment by installing all Tests4Py projects and their corresponding versions.")
 
@@ -71,5 +71,4 @@ def main():
     chosen_projects = select_projects(args.project)
     t4p_checkout(chosen_projects, t4p, tmp_dir, scripts_dir)
 
-if __name__ == "__main__":
-    main()
+main()
