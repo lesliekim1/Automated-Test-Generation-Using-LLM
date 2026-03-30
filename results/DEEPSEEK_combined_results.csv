@@ -1,4 +1,4 @@
-program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason,prompt_mode,Actual
+program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason,prompt_mode,RELIABLE,REASON
 black_1,test_black.py,True,test_black_DEEPSEEK_CORNERCASES.py,True,True,80.0,83.0,3.0,True,,CORNERCASES,
 expression_1,test_expression.py,True,test_expression_DEEPSEEK_CORNERCASES.py,True,True,88.0,90.0,2.0,True,,CORNERCASES,
 fastapi_1,test_jsonable_encoder.py,True,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,True,True,44.0,46.0,2.0,True,,CORNERCASES,

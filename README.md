@@ -14,7 +14,7 @@ For each trial (a buggy version of a Tests4Py project):
    - Coverage improvement filter (must increase statement coverage)
 4. Results are recorded in a CSV file, including coverage before and after test generation, and filter success outcomes.
 5. Final analysis computes overall and filter success rates.
-6. Manually check each passed test to determine whether it's actually useful.
+6. Manually check each passed test to determine whether it's actually reliable.
 
 ## Installation
 

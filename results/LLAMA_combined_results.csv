@@ -1,4 +1,4 @@
-program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason,prompt_mode,Actual
+program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,coverage_after,coverage_delta,kept,discard_reason,prompt_mode,RELIABLE,REASON
 ansible_3,test_errors.py,True,test_errors_LLAMA_CORNERCASES.py,True,True,52.0,62.0,10.0,True,,CORNERCASES,
 ansible_6,test_errors.py,True,test_errors_LLAMA_CORNERCASES.py,True,True,52.0,58.0,6.0,True,,CORNERCASES,
 ansible_15,test_errors.py,True,test_errors_LLAMA_CORNERCASES.py,True,True,52.0,67.0,15.0,True,,CORNERCASES,

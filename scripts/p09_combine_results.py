@@ -35,8 +35,9 @@ def main():
     # Keep trials that passed the third filter
     df_kept = combined_df[combined_df["kept"] == True].copy()
 
-    # Add a new column for manually checking if passed test is actually good or not
-    df_kept["Actual"] = ""
+    # Add new columns for manually review
+    df_kept["RELIABLE"] = "" # True or False
+    df_kept["REASON"] = "" # brief description on why the passed test isn't reliable
 
     output_file = results_dir / "combined_tests.csv"
     df_kept.to_csv(output_file, index=False)
