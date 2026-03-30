@@ -14,6 +14,7 @@ For each trial (a buggy version of a Tests4Py project):
    - Coverage improvement filter (must increase statement coverage)
 4. Results are recorded in a CSV file, including coverage before and after test generation, and filter success outcomes.
 5. Final analysis computes overall and filter success rates.
+6. Manually check each passed test to determine whether it's actually useful.
 
 ## Installation
 
@@ -138,6 +139,17 @@ create tables to display the results (overall success rate and each filter succe
 options:
   -h, --help              show this help message and exit
   -f FILE, --file FILE    CSV filename in results directory that records the data.
+```
+
+[p09_combine_results.py](p09_combine_results.py)
+```bash
+usage: p09_combine_csv.py [-h] -f FILES [FILES ...]
+
+combine specified CSV files and extract trials that passed TestGen-LLM only.
+
+options:
+  -h, --help                       show this help message and exit
+  -f, --files FILES [FILES ...]    List of CSV files in the results directory to combine
 ```
 
 ## License 
