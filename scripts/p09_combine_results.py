@@ -11,8 +11,7 @@ def main():
     parser.add_argument(
         "-f", "--files",
         nargs="+",
-        required=True,
-        help="List of CSV files in the results directory to combine"
+        help="list of CSV files in the results directory to combine"
     )
 
     args = parser.parse_args()

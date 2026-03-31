@@ -149,7 +149,18 @@ combine specified CSV files and extract trials that passed TestGen-LLM only.
 
 options:
   -h, --help                       show this help message and exit
-  -f, --files FILES [FILES ...]    List of CSV files in the results directory to combine
+  -f, --files FILES [FILES ...]    list of CSV files in the results directory to combine
+```
+
+[p10_statistical_analysis.py](p10_statistical_analysis.py)
+```bash
+usage: p10_statistical_analysis.py [-h] [-f FILE]
+
+calculate precision score for model and also run a two-proportion z-test.
+
+options:
+  -h, --help         show this help message and exit
+  -f, --file FILE    CSV filename in results directory that records the data.
 ```
 
 ## License 
