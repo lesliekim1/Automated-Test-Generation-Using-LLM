@@ -13,8 +13,7 @@ For each trial (a buggy version of a Tests4Py project):
    - Pass filter (run 5 times with pytest to detect flakiness)
    - Coverage improvement filter (must increase statement coverage)
 4. Results are recorded in a CSV file, including coverage before and after test generation, and filter success outcomes.
-5. Final analysis computes overall and filter success rates.
-6. Manually check each passed test to determine whether it's actually reliable.
+5. Final analysis computes overall and filter success rates, evaluates precision scores, and performs a two-proportion z-test to assess statistical significance.
 
 ## Installation
 
