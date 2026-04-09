@@ -105,7 +105,7 @@ options:
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-[p06_llm_coverage.py](p06_llm_coverage.py)
+[p06_llm_coverage.py](scripts/p06_llm_coverage.py)
 ```bash
 usage: p06_llm_coverage.py [-h] [-p PROJECT] [-f FILE]
 
@@ -117,7 +117,7 @@ options:
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-[p07_coverage_improvement_filter.py](p07_coverage_improvement_filter.py)
+[p07_coverage_improvement_filter.py](scripts/p07_coverage_improvement_filter.py)
 ```bash
 usage: p07_coverage_improvement_filter.py [-h] [-p PROJECT] [-f FILE]
 
@@ -129,7 +129,7 @@ options:
   -f, --file FILE         CSV filename in results directory that records the data.
 ```
 
-[p08_analysis.py](p08_analysis.py)
+[p08_analysis.py](scripts/p08_analysis.py)
 ```bash
 usage: p08_analysis.py [-h] [-f FILE]
 
@@ -140,7 +140,7 @@ options:
   -f FILE, --file FILE    CSV filename in results directory that records the data.
 ```
 
-[p09_combine_results.py](p09_combine_results.py)
+[p09_combine_results.py](scripts/p09_combine_results.py)
 ```bash
 usage: p09_combine_csv.py [-h] -f FILES [FILES ...]
 
@@ -151,7 +151,7 @@ options:
   -f, --files FILES [FILES ...]    list of CSV files in the results directory to combine
 ```
 
-[p10_statistical_analysis.py](p10_statistical_analysis.py)
+[p10_statistical_analysis.py](scripts/p10_statistical_analysis.py)
 ```bash
 usage: p10_statistical_analysis.py [-h] [-f FILE]
 
