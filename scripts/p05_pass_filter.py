@@ -73,7 +73,7 @@ def main():
     results_csv = results_dir / args.file
     python = sys.executable
     
-    # Read results.csv and iterate through any projects that have passed the first (build) filter
+    # Read results.csv and iterate through any projects that have passed the build filter
     df = pd.read_csv(results_csv)
     df_pass = df[(df["usable"] == True) & (df["builds"] == True) & df["passes"].isna()]
     

@@ -50,7 +50,7 @@ def record_result(df, program_name, result):
         df.loc[df["program_name"] == program_name, "discard_reason"] = pd.NA
         print("BUILD SUCCESS ...")
 
-# Apply Meta's TestGen-LLM's first filter, which is to check for build correctness 
+# Apply TestGen-LLM's first filter, which is to check for build correctness 
 def main():
     parser = argparse.ArgumentParser(
         description="check if an LLM-generated test class is built correctly."
@@ -75,7 +75,7 @@ def main():
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
 
-    # Read results.csv and iterate through 'usable' projects only (projects that have coverage_before)
+    # Read results.csv and iterate through 'usable' projects only
     df = pd.read_csv(results_csv)
     df_usable = df[(df["usable"] == True) & df["builds"].isna()]
 

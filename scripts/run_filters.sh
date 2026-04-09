@@ -1,7 +1,7 @@
 #!/bin/bash
 # Automate running all filters py files (p04 - p07)
 # run: ./run_filters.sh <project1> <project2> <project3> ...
-# example: ./run_filters.sh calculator ansible
+# example: ./run_filters.sh calculator
 
 if [ "$#" -lt 1 ]; then
     echo "Usage: $0 <project1> <project2> <project3> ..."

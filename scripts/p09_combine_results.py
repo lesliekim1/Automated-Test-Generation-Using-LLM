@@ -35,8 +35,8 @@ def main():
     df_kept = combined_df[combined_df["kept"] == True].copy()
 
     # Add new columns for manually review
-    df_kept["RELIABLE"] = "" # True or False
-    df_kept["REASON"] = "" # brief description on why the passed test isn't reliable
+    df_kept["RELIABLE"] = ""
+    df_kept["REASON"] = "" 
 
     output_file = results_dir / "combined_tests.csv"
     df_kept.to_csv(output_file, index=False)

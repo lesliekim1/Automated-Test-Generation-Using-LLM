@@ -112,7 +112,7 @@ def main():
     results_dir = scripts_dir.parent / "results"
     results_csv = results_dir / args.file
     
-    # Read results.csv and iterate through 'usable' projects only (projects that passed the setup and have baseline coverage recorded)
+    # Read results.csv and iterate through 'usable' projects only (projects that have baseline coverage recorded)
     df = pd.read_csv(results_csv)
     df["llm_test_file"] = df["llm_test_file"].astype("string")
     df_usable = df[(df["usable"] == True) & df["llm_test_file"].isna()]
@@ -238,7 +238,7 @@ def main():
         print(f"GENERATING EXTENDED TEST FOR {program_name} ...")
         output_file = original_test_file.with_name(original_test_file.stem + "_" + args.model.upper() + "_" + mode + ".py")
          
-        # Prompt the selected LLM to generate an extended test suite
+        # Prompt the selected LLM to generate an extended test class
         try:
             response = ollama.chat(model=LLMS[args.model], messages=[
                 {
