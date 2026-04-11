@@ -29,6 +29,7 @@ def main():
 
     print(f"\nTP (reliable): {tp}")
     print(f"FP (not reliable): {fp}")
+    print(f"total passed tests: {tp+fp}")
     print(f"PRECISION SCORE: {precision:.4f}")
 
     # Two-proportion z-test (manually typed)

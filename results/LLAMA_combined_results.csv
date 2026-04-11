@@ -7,7 +7,7 @@ ansible_18,test_errors.py,TRUE,test_errors_LLAMA_CORNERCASES.py,TRUE,TRUE,52,71,
 cookiecutter_3,test_generate_file.py,TRUE,test_generate_file_LLAMA_CORNERCASES.py,TRUE,TRUE,41,45,4,TRUE,,CORNERCASES,TRUE,
 fastapi_15,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_LLAMA_CORNERCASES.py,TRUE,TRUE,50,54,4,TRUE,,CORNERCASES,FALSE,duplicate tests
 fastapi_16,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_LLAMA_CORNERCASES.py,TRUE,TRUE,50,51,1,TRUE,,CORNERCASES,FALSE,incorrect expected behavior  
-httpie_1,test_exit_status.py,TRUE,test_exit_status_LLAMA_CORNERCASES.py,TRUE,TRUE,57,58,1,TRUE,,CORNERCASES,TRUE,
+httpie_1,test_exit_status.py,TRUE,test_exit_status_LLAMA_CORNERCASES.py,TRUE,TRUE,57,58,1,TRUE,,CORNERCASES,FALSE,undefined variable (model)
 httpie_2,test_exit_status.py,TRUE,test_exit_status_LLAMA_CORNERCASES.py,TRUE,TRUE,57,58,1,TRUE,,CORNERCASES,TRUE,
 httpie_3,test_exit_status.py,TRUE,test_exit_status_LLAMA_CORNERCASES.py,TRUE,TRUE,57,58,1,TRUE,,CORNERCASES,TRUE,
 middle_1,test_middle.py,TRUE,test_middle_LLAMA_CORNERCASES.py,TRUE,TRUE,96,98,2,TRUE,,CORNERCASES,TRUE,
@@ -18,7 +18,7 @@ thefuck_23,test_logs.py,TRUE,test_logs_LLAMA_CORNERCASES.py,TRUE,TRUE,46,51,5,TR
 thefuck_29,test_logs.py,TRUE,test_logs_LLAMA_CORNERCASES.py,TRUE,TRUE,71,85,14,TRUE,,CORNERCASES,FALSE,multiple meaningless assertions (assert True)
 thefuck_30,test_logs.py,TRUE,test_logs_LLAMA_CORNERCASES.py,TRUE,TRUE,74,77,3,TRUE,,CORNERCASES,FALSE,repetitive tests
 tqdm_2,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,76,77,1,TRUE,,CORNERCASES,TRUE,
-tqdm_3,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,73,74,1,TRUE,,CORNERCASES,TRUE,
+tqdm_3,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,73,74,1,TRUE,,CORNERCASES,FALSE,"incorrect assertions"
 tqdm_4,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,71,72,1,TRUE,,CORNERCASES,TRUE,
 tqdm_5,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,70,72,2,TRUE,,CORNERCASES,TRUE,
 tqdm_6,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_CORNERCASES.py,TRUE,TRUE,69,71,2,TRUE,,CORNERCASES,TRUE,
@@ -33,7 +33,7 @@ ansible_16,test_errors.py,TRUE,test_errors_LLAMA_TESTCUT.py,TRUE,TRUE,52,68,16,T
 ansible_17,test_errors.py,TRUE,test_errors_LLAMA_TESTCUT.py,TRUE,TRUE,52,57,5,TRUE,,TESTCUT,FALSE,repetitive tests
 cookiecutter_3,test_generate_file.py,TRUE,test_generate_file_LLAMA_TESTCUT.py,TRUE,TRUE,41,47,6,TRUE,,TESTCUT,TRUE,
 expression_1,test_expression.py,TRUE,test_expression_LLAMA_TESTCUT.py,TRUE,TRUE,88,93,5,TRUE,,TESTCUT,TRUE,
-fastapi_13,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_LLAMA_TESTCUT.py,TRUE,TRUE,48,52,4,TRUE,,TESTCUT,TRUE,
+fastapi_13,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_LLAMA_TESTCUT.py,TRUE,TRUE,48,52,4,TRUE,,TESTCUT,FALSE,"assertion is written wrong in test_encode_nested_dict() because it supposed to pass an Object DictablePerson, but it passed a String name instead"
 fastapi_15,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_LLAMA_TESTCUT.py,TRUE,TRUE,50,55,5,TRUE,,TESTCUT,TRUE,
 middle_1,test_middle.py,TRUE,test_middle_LLAMA_TESTCUT.py,TRUE,TRUE,96,97,1,TRUE,,TESTCUT,TRUE,
 middle_2,test_middle.py,TRUE,test_middle_LLAMA_TESTCUT.py,TRUE,TRUE,96,97,1,TRUE,,TESTCUT,TRUE,
@@ -67,7 +67,7 @@ tqdm_2,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,76,77,1,TRUE,,T
 tqdm_3,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,73,75,2,TRUE,,TESTONLY,TRUE,
 tqdm_4,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,71,73,2,TRUE,,TESTONLY,TRUE,
 tqdm_5,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,70,72,2,TRUE,,TESTONLY,TRUE,
-tqdm_6,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,69,72,3,TRUE,,TESTONLY,TRUE,
+tqdm_6,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,69,72,3,TRUE,,TESTONLY,FALSE,uses undefined variables
 tqdm_7,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,82,85,3,TRUE,,TESTONLY,TRUE,
 tqdm_8,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_TESTONLY.py,TRUE,TRUE,63,66,3,TRUE,,TESTONLY,TRUE,
 youtubedl_11,test_age_restriction.py,TRUE,test_age_restriction_LLAMA_TESTONLY.py,TRUE,TRUE,27,28,1,TRUE,,TESTONLY,TRUE,
@@ -95,4 +95,4 @@ tqdm_5,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,70,72,
 tqdm_6,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,69,70,1,TRUE,,STATEMENTCOMPLETE,TRUE,
 tqdm_7,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,82,84,2,TRUE,,STATEMENTCOMPLETE,TRUE,
 tqdm_8,tests_tqdm.py,TRUE,tests_tqdm_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,63,66,3,TRUE,,STATEMENTCOMPLETE,TRUE,
-youtubedl_32,test_age_restriction.py,TRUE,test_age_restriction_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,29,30,1,TRUE,,STATEMENTCOMPLETE,TRUE,
+youtubedl_32,test_age_restriction.py,TRUE,test_age_restriction_LLAMA_STATEMENTCOMPLETE.py,TRUE,TRUE,29,30,1,TRUE,,STATEMENTCOMPLETE,FALSE,

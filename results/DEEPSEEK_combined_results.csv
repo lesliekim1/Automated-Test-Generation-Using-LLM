@@ -2,7 +2,7 @@ program_name,test_file,usable,llm_test_file,builds,passes,coverage_before,covera
 black_1,test_black.py,TRUE,test_black_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,80,83,3,TRUE,,CORNERCASES,FALSE,no assertions
 expression_1,test_expression.py,TRUE,test_expression_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,88,90,2,TRUE,,CORNERCASES,TRUE,
 fastapi_1,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,44,46,2,TRUE,,CORNERCASES,TRUE,
-fastapi_2,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,44,45,1,TRUE,,CORNERCASES,TRUE,
+fastapi_2,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,44,45,1,TRUE,,CORNERCASES,FALSE,"uses undefined variable, such as ModelWithCustomEncoder"
 fastapi_4,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,43,44,1,TRUE,,CORNERCASES,TRUE,
 fastapi_5,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,43,44,1,TRUE,,CORNERCASES,FALSE,incorrect expected behavior
 fastapi_8,test_jsonable_encoder.py,TRUE,test_jsonable_encoder_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,44,47,3,TRUE,,CORNERCASES,TRUE,
@@ -21,7 +21,7 @@ matplotlib_21,test_container.py,TRUE,test_container_DEEPSEEK_CORNERCASES.py,TRUE
 sanic_4,test_middleware.py,TRUE,test_middleware_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,25,28,3,TRUE,,CORNERCASES,TRUE,
 sanic_5,test_middleware.py,TRUE,test_middleware_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,25,25,0,TRUE,,CORNERCASES,TRUE,
 scrapy_24,test_command_fetch.py,TRUE,test_command_fetch_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,31,32,1,TRUE,,CORNERCASES,TRUE,
-scrapy_27,test_command_fetch.py,TRUE,test_command_fetch_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,31,32,1,TRUE,,CORNERCASES,TRUE,
+scrapy_27,test_command_fetch.py,TRUE,test_command_fetch_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,31,32,1,TRUE,,CORNERCASES,FALSE,"uses undefined variable (UsageError), assertion has wrong input"
 thefuck_1,test_logs.py,TRUE,test_logs_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,45,47,2,TRUE,,CORNERCASES,TRUE,
 thefuck_2,test_logs.py,TRUE,test_logs_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,45,47,2,TRUE,,CORNERCASES,TRUE,
 thefuck_22,test_logs.py,TRUE,test_logs_DEEPSEEK_CORNERCASES.py,TRUE,TRUE,46,55,9,TRUE,,CORNERCASES,FALSE,some tests have no assertions
@@ -196,6 +196,6 @@ youtubedl_33,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMEN
 youtubedl_36,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,28,31,3,TRUE,,STATEMENTCOMPLETE,TRUE,
 youtubedl_37,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,27,28,1,TRUE,,STATEMENTCOMPLETE,TRUE,
 youtubedl_40,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,26,29,3,TRUE,,STATEMENTCOMPLETE,TRUE,
-youtubedl_41,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,27,27,0,TRUE,,STATEMENTCOMPLETE,TRUE,
+youtubedl_41,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,27,27,0,TRUE,,STATEMENTCOMPLETE,FALSE,"incorrect assertions, doesn't verify program behavior to check age restriction"
 youtubedl_42,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,26,26,0,TRUE,,STATEMENTCOMPLETE,TRUE,
-youtubedl_43,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,25,25,0,TRUE,,STATEMENTCOMPLETE,TRUE,
+youtubedl_43,test_age_restriction.py,TRUE,test_age_restriction_DEEPSEEK_STATEMENTCOMPLETE.py,TRUE,TRUE,25,25,0,TRUE,,STATEMENTCOMPLETE,FALSE,incorrect assertions - relies on external links instead of verifying behavior
