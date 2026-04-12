@@ -66,13 +66,13 @@ def main():
     
     
     # Combined overall and filter tables (manually typed data)
-    combined_success = 45 + 33 + 57 + 65
+    combined_success = 27 + 23 + 26 + 16
     combined_trials = 328 * 4
-    combined_build = 79 + 78 + 118 + 108
-    combined_pass = 79 + 78 + 118 + 108
+    combined_build = 60 + 69 + 97 + 42
+    combined_pass = 60 + 69 + 97 + 42
 
     combined_overall_data = [
-        ["DeepSeek-Coder", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
+        ["Llama", combined_success, combined_trials, round(combined_success / combined_trials, 2)]
     ]
 
     combined_overall_table = pd.DataFrame(
@@ -81,9 +81,9 @@ def main():
     )
 
     combined_filter_data = [
-        ["DeepSeek-Coder", "Build", combined_build, combined_trials, round(combined_build / combined_trials, 2)],
-        ["DeepSeek-Coder", "Pass", combined_pass, combined_build, round(combined_pass / combined_build, 2)],
-        ["DeepSeek-Coder", "Add Coverage", combined_success, combined_pass, round(combined_success / combined_pass, 2)]
+        ["Llama", "Build", combined_build, combined_trials, round(combined_build / combined_trials, 2)],
+        ["Llama", "Pass", combined_pass, combined_build, round(combined_pass / combined_build, 2)],
+        ["Llama", "Add Coverage", combined_success, combined_pass, round(combined_success / combined_pass, 2)]
     ]
 
     combined_filter_table = pd.DataFrame(
@@ -92,6 +92,6 @@ def main():
     )
 
     print("\n" + combined_overall_table.to_string(index=False))
-    print("\n" + combined_filter_table.to_string(index=False))
+    print("\n" + combined_filter_table.to_string(index=False) + "\n")
 
 main()

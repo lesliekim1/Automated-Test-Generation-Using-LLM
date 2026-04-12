@@ -162,5 +162,16 @@ options:
   -f, --file FILE    CSV filename in results directory that records the data.
 ```
 
+[p11_avg_coverage_delta.py](scripts/p11_avg_coverage_delta.py)
+```bash
+usage: p11_avg_coverage_delta.py [-h] [-f FILE]
+
+calculate average coverage delta (increase) per prompt.
+
+options:
+  -h, --help         show this help message and exit
+  -f, --file FILE    CSV filename in results directory that records the data.
+```
+
 ## License 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

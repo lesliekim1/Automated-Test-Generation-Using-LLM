@@ -33,7 +33,7 @@ def main():
     print(f"PRECISION SCORE: {precision:.4f}")
 
     # Two-proportion z-test (manually typed)
-    count = np.array([97, 200])
+    count = np.array([92, 178])
     nobs = np.array([1312, 1312])
 
     z_stat, p_val = proportions_ztest(count, nobs, alternative='two-sided')

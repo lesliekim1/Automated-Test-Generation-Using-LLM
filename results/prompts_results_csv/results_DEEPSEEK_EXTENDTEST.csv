@@ -353,9 +353,9 @@ pysnooper_2,test_pysnooper.py,True,test_pysnooper_DEEPSEEK_TESTONLY.py,False,,46
 pysnooper_3,test_pysnooper.py,True,test_pysnooper_DEEPSEEK_TESTONLY.py,False,,58.0,,,,1.0,TESTONLY
 sanic_1,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,26.0,26.0,0.0,False,3.0,TESTONLY
 sanic_2,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,28.0,3.0,True,,TESTONLY
-sanic_3,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,25.0,0.0,True,,TESTONLY
+sanic_3,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,25.0,0.0,False,3.0,TESTONLY
 sanic_4,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,28.0,3.0,True,,TESTONLY
-sanic_5,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,25.0,0.0,True,,TESTONLY
+sanic_5,test_middleware.py,True,test_middleware_DEEPSEEK_TESTONLY.py,True,True,25.0,25.0,0.0,False,3.0,TESTONLY
 scrapy_1,test_command_fetch.py,True,test_command_fetch_DEEPSEEK_TESTONLY.py,True,True,31.0,31.0,0.0,False,3.0,TESTONLY
 scrapy_2,test_command_fetch.py,True,test_command_fetch_DEEPSEEK_TESTONLY.py,False,,32.0,,,,1.0,TESTONLY
 scrapy_3,test_command_fetch.py,True,test_command_fetch_DEEPSEEK_TESTONLY.py,True,True,32.0,32.0,0.0,False,3.0,TESTONLY
